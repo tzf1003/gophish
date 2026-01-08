@@ -1,8 +1,9 @@
 {{define "body"}}
 <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
-    <h1 class="page-header">
-        仪表盘
-    </h1>
+    <div class="page-titlebar">
+        <h1 class="page-header">仪表盘</h1>
+        <div class="page-actions"></div>
+    </div>
     <div id="loading">
         <i class="fa fa-spinner fa-spin fa-4x"></i>
     </div>
@@ -25,15 +26,12 @@
             <div id="email_reported_chart" style="height:200px;" class="col-lg-2 col-md-2"></div>
             <div style="height:200px;" class="col-lg-1 col-md-1"></div>
         </div>
-        <div class="row">
-            <h2>最近活动</h2>
+        <div class="section-titlebar">
+            <h2 class="section-title">最近活动</h2>
+            <div class="section-actions">
+                <a href="/campaigns" class="btn btn-primary">查看全部</a>
+            </div>
         </div>
-        <div class="row">
-            <a href="/campaigns">
-                <button type="button" class="btn btn-primary">查看全部</button>
-            </a>
-        </div>
-        &nbsp;&nbsp;
         <div class="row">
             <table id="campaignTable" class="table">
                 <thead>

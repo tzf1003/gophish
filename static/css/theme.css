@@ -97,8 +97,8 @@ a:focus {
 }
 
 .sidebar {
-    margin-top: 70px;
-    padding: 16px;
+    margin-top: 0;
+    padding: 20px;
 }
 
 .nav-sidebar {
@@ -107,6 +107,22 @@ a:focus {
     border-radius: var(--gp-radius);
     box-shadow: var(--gp-shadow-soft);
     padding: 10px;
+    margin: 0;
+    max-height: none;
+    overflow: visible;
+}
+
+.nav-sidebar hr {
+    border-top: 1px solid var(--gp-border);
+    margin: 10px 12px;
+}
+
+.main {
+    padding: 20px;
+}
+
+.main > .row {
+    margin-bottom: 16px;
 }
 
 .nav-sidebar > li > a {
@@ -126,9 +142,55 @@ a:focus {
 
 .page-header {
     border-bottom: 1px solid var(--gp-border);
-    margin-top: 28px;
+    margin-top: 0;
     padding-bottom: 14px;
     animation: gpFadeUp 420ms ease both;
+}
+
+.page-titlebar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 16px;
+    flex-wrap: wrap;
+}
+
+.page-titlebar .page-header {
+    margin: 0;
+    padding-bottom: 10px;
+}
+
+.page-actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.section-titlebar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin: 20px 0 12px;
+    flex-wrap: wrap;
+}
+
+.section-title {
+    margin: 0;
+    font-size: 20px;
+    font-weight: 700;
+}
+
+.section-actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.page-header > small {
+    color: var(--gp-muted);
 }
 
 .panel,
@@ -167,8 +229,12 @@ a:focus {
 }
 
 .table {
-    background: transparent;
+    background: var(--gp-card);
     color: var(--gp-text);
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1px solid var(--gp-border);
+    box-shadow: var(--gp-shadow-soft);
 }
 
 .table > thead > tr > th {
@@ -190,6 +256,10 @@ a:focus {
     border-radius: 10px;
     font-weight: 600;
     transition: background-color 0.2s ease, color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.btn.btn-lg {
+    border-radius: 12px;
 }
 
 .btn-primary,
@@ -243,6 +313,10 @@ a:focus {
     box-shadow: none;
 }
 
+.form-control::placeholder {
+    color: rgba(71, 85, 105, 0.7);
+}
+
 .form-control:focus {
     border-color: rgba(31, 136, 255, 0.5);
     box-shadow: 0 0 0 3px rgba(31, 136, 255, 0.16);
@@ -252,6 +326,11 @@ a:focus {
     background: rgba(15, 23, 42, 0.05);
     border: 1px solid var(--gp-border);
     color: var(--gp-muted);
+}
+
+input[type="checkbox"],
+input[type="radio"] {
+    accent-color: var(--gp-primary);
 }
 
 .select2-container--bootstrap .select2-selection--single {
@@ -339,6 +418,19 @@ a:focus {
     }
 }
 
+#loading {
+    text-align: center;
+    color: var(--gp-muted);
+    padding: 20px 0;
+}
+
+#flashes .alert {
+    border-radius: 12px;
+    border: 1px solid var(--gp-border);
+    box-shadow: var(--gp-shadow-soft);
+    background: rgba(255, 255, 255, 0.82);
+}
+
 @supports not (backdrop-filter: blur(12px)) {
     .gp-navbar.navbar-inverse,
     .panel,
@@ -348,5 +440,26 @@ a:focus {
     .nav-sidebar,
     .swal2-popup {
         background: var(--gp-card-strong);
+    }
+}
+
+@media (min-width: 768px) {
+    .main {
+        padding-right: 40px;
+        padding-left: 40px;
+    }
+}
+
+@media (max-width: 767px) {
+    .main {
+        padding: 20px 16px 30px;
+    }
+
+    .sidebar {
+        margin-top: 0;
+    }
+
+    .nav-sidebar {
+        max-height: none;
     }
 }

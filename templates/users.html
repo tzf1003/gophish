@@ -1,19 +1,16 @@
 {{define "body"}}
 <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
-    <div class="row">
-        <h1 class="page-header">
-            {{.Title}}
-        </h1>
+    <div class="page-titlebar">
+        <h1 class="page-header">{{.Title}}</h1>
+        <div class="page-actions">
+            <button type="button" class="btn btn-primary" id="new_button" data-toggle="modal" data-backdrop="static"
+                data-user-id="-1" data-target="#modal">
+                <i class="fa fa-plus"></i> 新建用户</button>
+        </div>
     </div>
     <div id="flashes" class="row">
         {{template "flashes" .Flashes}}
     </div>
-    <div class="row">
-        <button type="button" class="btn btn-primary" id="new_button" data-toggle="modal" data-backdrop="static"
-            data-user-id="-1" data-target="#modal">
-            <i class="fa fa-plus"></i> 新建用户</button>
-    </div>
-    &nbsp;
     <div id="loading">
         <i class="fa fa-spinner fa-spin fa-4x"></i>
     </div>
@@ -73,7 +70,7 @@
                 </div>
                 <label class="control-label" for="role">角色：</label>
                 <div class="form-group" id="role-select">
-                    <select class="form-control" placeholder="" id="role" />
+                    <select class="form-control" placeholder="" id="role">
                     <option value="admin">管理员</option>
                     <option value="user">普通用户</option>
                     </select>

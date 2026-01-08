@@ -1,14 +1,13 @@
 {{define "body"}}
 <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
-    <h1 class="page-header">
-        落地页
-    </h1>
-    <div id="flashes" class="row"></div>
-    <div class="row">
-        <button type="button" class="btn btn-primary" onclick="edit(-1)" data-toggle="modal" data-backdrop="static"
-            data-target="#modal"><i class="fa fa-plus"></i> 新建页面</button>
+    <div class="page-titlebar">
+        <h1 class="page-header">落地页</h1>
+        <div class="page-actions">
+            <button type="button" class="btn btn-primary" onclick="edit(-1)" data-toggle="modal" data-backdrop="static"
+                data-target="#modal"><i class="fa fa-plus"></i> 新建页面</button>
+        </div>
     </div>
-    &nbsp;
+    <div id="flashes" class="row"></div>
     <div id="loading">
         <i class="fa fa-spinner fa-spin fa-4x"></i>
     </div>
@@ -71,8 +70,7 @@
                     <input id="capture_passwords_checkbox" type="checkbox">
                     <label for="capture_passwords_checkbox">捕获密码</label>
                     <div class="alert alert-warning">
-                        <i class="fa fa-exclamation-circle"></i> <b>警告：</b>凭据目前<b>未加密</b>，捕获的密码将以明文存储在数据库中。
-                        请谨慎使用！
+                        <i class="fa fa-exclamation-circle"></i> <b>警告：</b>当前未加密，捕获的密码将以明文存储在数据库中。请谨慎使用！
                     </div>
                 </div>
                 <div id="redirect_url">

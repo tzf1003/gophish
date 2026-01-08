@@ -1,7 +1,8 @@
 {{define "body"}}
 <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
-    <div class="row">
+    <div class="page-titlebar">
         <h1 class="page-header">设置</h1>
+        <div class="page-actions"></div>
     </div>
     <div id="flashes" class="row"></div>
     {{template "flashes" .Flashes}}
@@ -96,7 +97,7 @@
             <br />
             <div class="row">
                 <div class="col-md-6">
-                    监控 IMAP 邮箱，用于接收用户上报邮件。
+                    监听 IMAP 邮箱，用于接收用户上报邮件。
                 </div>
              </div>
             <br />
@@ -105,7 +106,7 @@
                 <div class="col-md-6">
                 <div class="checkbox checkbox-primary">
                     <input id="use_imap" type="checkbox">
-                    <label for="use_imap">启用邮件账号监控</label>
+                    <label for="use_imap">启用邮箱账号监听</label>
                 </div>
                 </div>
              </div>
