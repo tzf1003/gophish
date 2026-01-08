@@ -32,29 +32,29 @@ type IMAP struct {
 
 // ErrIMAPHostNotSpecified is thrown when there is no Host specified
 // in the IMAP configuration
-var ErrIMAPHostNotSpecified = errors.New("No IMAP Host specified")
+var ErrIMAPHostNotSpecified = errors.New("未指定 IMAP 主机")
 
 // ErrIMAPPortNotSpecified is thrown when there is no Port specified
 // in the IMAP configuration
-var ErrIMAPPortNotSpecified = errors.New("No IMAP Port specified")
+var ErrIMAPPortNotSpecified = errors.New("未指定 IMAP 端口")
 
 // ErrInvalidIMAPHost indicates that the IMAP server string is invalid
-var ErrInvalidIMAPHost = errors.New("Invalid IMAP server address")
+var ErrInvalidIMAPHost = errors.New("IMAP 服务器地址无效")
 
 // ErrInvalidIMAPPort indicates that the IMAP Port is invalid
-var ErrInvalidIMAPPort = errors.New("Invalid IMAP Port")
+var ErrInvalidIMAPPort = errors.New("IMAP 端口无效")
 
 // ErrIMAPUsernameNotSpecified is thrown when there is no Username specified
 // in the IMAP configuration
-var ErrIMAPUsernameNotSpecified = errors.New("No Username specified")
+var ErrIMAPUsernameNotSpecified = errors.New("未指定用户名")
 
 // ErrIMAPPasswordNotSpecified is thrown when there is no Password specified
 // in the IMAP configuration
-var ErrIMAPPasswordNotSpecified = errors.New("No Password specified")
+var ErrIMAPPasswordNotSpecified = errors.New("未指定密码")
 
 // ErrInvalidIMAPFreq is thrown when the frequency for polling the
 // IMAP server is invalid
-var ErrInvalidIMAPFreq = errors.New("Invalid polling frequency")
+var ErrInvalidIMAPFreq = errors.New("轮询频率无效")
 
 // TableName specifies the database tablename for Gorm to use
 func (im IMAP) TableName() string {

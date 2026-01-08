@@ -1,0 +1,352 @@
+:root {
+    --gp-bg: #f1f5fb;
+    --gp-bg-soft: #e9eff7;
+    --gp-card: rgba(255, 255, 255, 0.76);
+    --gp-card-strong: rgba(255, 255, 255, 0.9);
+    --gp-border: rgba(15, 23, 42, 0.1);
+    --gp-border-strong: rgba(15, 23, 42, 0.16);
+    --gp-text: #0f172a;
+    --gp-muted: #475569;
+    --gp-primary: #1f88ff;
+    --gp-primary-strong: #1a6fd8;
+    --gp-accent: #15b8a6;
+    --gp-danger: #ef4444;
+    --gp-warning: #f59e0b;
+    --gp-success: #10b981;
+    --gp-shadow: 0 18px 45px rgba(15, 23, 42, 0.12);
+    --gp-shadow-soft: 0 10px 22px rgba(15, 23, 42, 0.1);
+    --gp-radius: 14px;
+}
+
+body.gp-app {
+    font-family: "Noto Sans SC", "Manrope", "Segoe UI", Arial, sans-serif;
+    color: var(--gp-text);
+    background: linear-gradient(135deg, #eaf2fb 0%, #f7f9fc 45%, #eef4ff 100%);
+    min-height: 100vh;
+    position: relative;
+    isolation: isolate;
+}
+
+body.gp-app::before,
+body.gp-app::after {
+    content: "";
+    position: fixed;
+    z-index: -1;
+    inset: auto;
+    pointer-events: none;
+    opacity: 0.55;
+    filter: blur(0);
+}
+
+body.gp-app::before {
+    width: 460px;
+    height: 460px;
+    top: -120px;
+    right: -120px;
+    background: radial-gradient(circle at center, rgba(31, 136, 255, 0.35), transparent 70%);
+}
+
+body.gp-app::after {
+    width: 520px;
+    height: 520px;
+    bottom: -180px;
+    left: -160px;
+    background: radial-gradient(circle at center, rgba(21, 184, 166, 0.3), transparent 70%);
+}
+
+h1, h2, h3, .navbar-brand, .page-header {
+    font-family: "Manrope", "Noto Sans SC", "Segoe UI", Arial, sans-serif;
+    letter-spacing: 0.2px;
+}
+
+.sans,
+.label {
+    font-family: "Noto Sans SC", "Manrope", "Segoe UI", Arial, sans-serif !important;
+}
+
+a {
+    color: var(--gp-primary);
+    transition: color 0.2s ease;
+}
+
+a:hover,
+a:focus {
+    color: var(--gp-primary-strong);
+    text-decoration: none;
+}
+
+.gp-navbar.navbar-inverse {
+    background: rgba(15, 23, 42, 0.78);
+    border: 0;
+    box-shadow: var(--gp-shadow-soft);
+    backdrop-filter: blur(16px);
+}
+
+.gp-navbar.navbar-inverse .navbar-brand,
+.gp-navbar.navbar-inverse .navbar-nav > li > a,
+.gp-navbar.navbar-inverse .navbar-text {
+    color: #f8fafc;
+}
+
+.gp-navbar.navbar-inverse .navbar-toggle {
+    border-color: rgba(248, 250, 252, 0.35);
+}
+
+.gp-navbar.navbar-inverse .navbar-toggle .icon-bar {
+    background-color: #f8fafc;
+}
+
+.sidebar {
+    margin-top: 70px;
+    padding: 16px;
+}
+
+.nav-sidebar {
+    background: var(--gp-card);
+    border: 1px solid var(--gp-border);
+    border-radius: var(--gp-radius);
+    box-shadow: var(--gp-shadow-soft);
+    padding: 10px;
+}
+
+.nav-sidebar > li > a {
+    color: var(--gp-text);
+    border-radius: 10px;
+    padding: 10px 12px;
+    transition: background-color 0.2s ease, color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.nav-sidebar > li > a:hover,
+.nav-sidebar > li.active > a,
+.nav-sidebar > li.active > a:focus {
+    color: var(--gp-text);
+    background: rgba(31, 136, 255, 0.12);
+    box-shadow: inset 0 0 0 1px rgba(31, 136, 255, 0.2);
+}
+
+.page-header {
+    border-bottom: 1px solid var(--gp-border);
+    margin-top: 28px;
+    padding-bottom: 14px;
+    animation: gpFadeUp 420ms ease both;
+}
+
+.panel,
+.well,
+.modal-content,
+.dataTables_wrapper,
+.timeline {
+    background: var(--gp-card);
+    border: 1px solid var(--gp-border);
+    border-radius: var(--gp-radius);
+    box-shadow: var(--gp-shadow);
+    backdrop-filter: blur(18px);
+}
+
+.form-signin {
+    background: var(--gp-card);
+    border: 1px solid var(--gp-border);
+    border-radius: var(--gp-radius);
+    box-shadow: var(--gp-shadow);
+    padding: 26px;
+}
+
+.panel-heading,
+.modal-header {
+    background: transparent;
+    border-bottom: 1px solid var(--gp-border);
+    font-weight: 600;
+}
+
+.panel-body {
+    color: var(--gp-text);
+}
+
+.modal-footer {
+    border-top: 1px solid var(--gp-border);
+}
+
+.table {
+    background: transparent;
+    color: var(--gp-text);
+}
+
+.table > thead > tr > th {
+    color: var(--gp-muted);
+    border-bottom: 1px solid var(--gp-border);
+    background: rgba(15, 23, 42, 0.04);
+    font-weight: 600;
+}
+
+.table > tbody > tr > td {
+    border-top: 1px solid var(--gp-border);
+}
+
+.table-hover > tbody > tr:hover {
+    background: rgba(31, 136, 255, 0.08);
+}
+
+.btn {
+    border-radius: 10px;
+    font-weight: 600;
+    transition: background-color 0.2s ease, color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.btn-primary,
+.btn-blue {
+    background-color: var(--gp-primary);
+    border-color: var(--gp-primary);
+    box-shadow: 0 10px 20px rgba(31, 136, 255, 0.25);
+}
+
+.btn-primary:hover,
+.btn-blue:hover,
+.btn-primary:focus,
+.btn-blue:focus {
+    background-color: var(--gp-primary-strong);
+    border-color: var(--gp-primary-strong);
+}
+
+.btn-default {
+    background-color: rgba(15, 23, 42, 0.04);
+    border-color: var(--gp-border);
+    color: var(--gp-text);
+}
+
+.btn-default:hover,
+.btn-default:focus {
+    background-color: rgba(15, 23, 42, 0.08);
+    border-color: var(--gp-border-strong);
+}
+
+.btn-danger {
+    background-color: var(--gp-danger);
+    border-color: var(--gp-danger);
+}
+
+.btn-warning {
+    background-color: var(--gp-warning);
+    border-color: var(--gp-warning);
+    color: #1f2937;
+}
+
+.btn-success {
+    background-color: var(--gp-success);
+    border-color: var(--gp-success);
+}
+
+.form-control {
+    background-color: rgba(255, 255, 255, 0.82);
+    border: 1px solid var(--gp-border);
+    border-radius: 10px;
+    color: var(--gp-text);
+    box-shadow: none;
+}
+
+.form-control:focus {
+    border-color: rgba(31, 136, 255, 0.5);
+    box-shadow: 0 0 0 3px rgba(31, 136, 255, 0.16);
+}
+
+.input-group-addon {
+    background: rgba(15, 23, 42, 0.05);
+    border: 1px solid var(--gp-border);
+    color: var(--gp-muted);
+}
+
+.select2-container--bootstrap .select2-selection--single {
+    background-color: rgba(255, 255, 255, 0.82);
+    border: 1px solid var(--gp-border);
+    border-radius: 10px;
+}
+
+.select2-container--bootstrap .select2-selection--single .select2-selection__rendered {
+    color: var(--gp-text);
+}
+
+.select2-container--bootstrap .select2-selection--multiple {
+    background-color: rgba(255, 255, 255, 0.82);
+    border: 1px solid var(--gp-border);
+    border-radius: 10px;
+}
+
+.label {
+    border-radius: 999px;
+    padding: 0.3em 0.8em;
+    font-weight: 600;
+}
+
+.pagination > li > a,
+.pagination > li > span {
+    border: 1px solid var(--gp-border);
+    color: var(--gp-muted);
+    border-radius: 8px;
+    margin-left: 6px;
+}
+
+.pagination > li > a:hover,
+.pagination > li > span:hover {
+    color: var(--gp-text);
+    background: rgba(31, 136, 255, 0.12);
+}
+
+.swal2-popup {
+    border-radius: var(--gp-radius);
+    background: var(--gp-card-strong);
+    border: 1px solid var(--gp-border);
+    box-shadow: var(--gp-shadow);
+}
+
+.swal2-title,
+.swal2-content {
+    color: var(--gp-text);
+}
+
+.table-responsive,
+.dataTables_wrapper {
+    animation: gpFadeUp 420ms ease both;
+}
+
+.panel,
+.modal-content,
+.timeline {
+    animation: gpFadeUp 420ms ease both;
+}
+
+.nav-sidebar > li {
+    animation: gpFadeUp 500ms ease both;
+}
+
+.nav-sidebar > li:nth-child(1) { animation-delay: 40ms; }
+.nav-sidebar > li:nth-child(2) { animation-delay: 70ms; }
+.nav-sidebar > li:nth-child(3) { animation-delay: 100ms; }
+.nav-sidebar > li:nth-child(4) { animation-delay: 130ms; }
+.nav-sidebar > li:nth-child(5) { animation-delay: 160ms; }
+.nav-sidebar > li:nth-child(6) { animation-delay: 190ms; }
+.nav-sidebar > li:nth-child(7) { animation-delay: 220ms; }
+.nav-sidebar > li:nth-child(8) { animation-delay: 250ms; }
+.nav-sidebar > li:nth-child(9) { animation-delay: 280ms; }
+.nav-sidebar > li:nth-child(10) { animation-delay: 310ms; }
+
+@keyframes gpFadeUp {
+    from {
+        opacity: 0;
+        transform: translateY(12px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@supports not (backdrop-filter: blur(12px)) {
+    .gp-navbar.navbar-inverse,
+    .panel,
+    .well,
+    .modal-content,
+    .dataTables_wrapper,
+    .nav-sidebar,
+    .swal2-popup {
+        background: var(--gp-card-strong);
+    }
+}

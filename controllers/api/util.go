@@ -20,12 +20,12 @@ func (as *Server) SendTestEmail(w http.ResponseWriter, r *http.Request) {
 		UserId:    ctx.Get(r, "user_id").(int64),
 	}
 	if r.Method != "POST" {
-		JSONResponse(w, models.Response{Success: false, Message: "Method not allowed"}, http.StatusBadRequest)
+		JSONResponse(w, models.Response{Success: false, Message: "不支持的请求方法"}, http.StatusBadRequest)
 		return
 	}
 	err := json.NewDecoder(r.Body).Decode(s)
 	if err != nil {
-		JSONResponse(w, models.Response{Success: false, Message: "Error decoding JSON Request"}, http.StatusBadRequest)
+		JSONResponse(w, models.Response{Success: false, Message: "解析 JSON 请求失败"}, http.StatusBadRequest)
 		return
 	}
 
@@ -34,14 +34,14 @@ func (as *Server) SendTestEmail(w http.ResponseWriter, r *http.Request) {
 	// If a Template is not specified use a default
 	if s.Template.Name == "" {
 		//default message body
-		text := "It works!\n\nThis is an email letting you know that your gophish\nconfiguration was successful.\n" +
-			"Here are the details:\n\nWho you sent from: {{.From}}\n\nWho you sent to: \n" +
-			"{{if .FirstName}} First Name: {{.FirstName}}\n{{end}}" +
-			"{{if .LastName}} Last Name: {{.LastName}}\n{{end}}" +
-			"{{if .Position}} Position: {{.Position}}\n{{end}}" +
-			"\nNow go send some phish!"
+		text := "测试成功！\n\n此邮件用于确认你的 Gophish 配置已生效。\n" +
+			"详细信息如下：\n\n发件人：{{.From}}\n\n收件人：\n" +
+			"{{if .FirstName}} 名：{{.FirstName}}\n{{end}}" +
+			"{{if .LastName}} 姓：{{.LastName}}\n{{end}}" +
+			"{{if .Position}} 职位：{{.Position}}\n{{end}}" +
+			"\n现在可以开始发送钓鱼演练邮件了！"
 		t := models.Template{
-			Subject: "Default Email from Gophish",
+			Subject: "Gophish 默认测试邮件",
 			Text:    text,
 		}
 		s.Template = t
@@ -130,5 +130,5 @@ func (as *Server) SendTestEmail(w http.ResponseWriter, r *http.Request) {
 		JSONResponse(w, models.Response{Success: false, Message: err.Error()}, http.StatusInternalServerError)
 		return
 	}
-	JSONResponse(w, models.Response{Success: true, Message: "Email Sent"}, http.StatusOK)
+	JSONResponse(w, models.Response{Success: true, Message: "邮件已发送"}, http.StatusOK)
 }

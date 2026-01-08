@@ -48,7 +48,7 @@ function save(idx) {
         template.id = templates[idx].id
         api.templateId.put(template)
             .success(function (data) {
-                successFlash("Template edited successfully!")
+                successFlash("模板更新成功！")
                 load()
                 dismiss()
             })
@@ -59,7 +59,7 @@ function save(idx) {
         // Submit the template
         api.templates.post(template)
             .success(function (data) {
-                successFlash("Template added successfully!")
+                successFlash("模板创建成功！")
                 load()
                 dismiss()
             })
@@ -81,12 +81,13 @@ function dismiss() {
 
 var deleteTemplate = function (idx) {
     Swal.fire({
-        title: "Are you sure?",
-        text: "This will delete the template. This can't be undone!",
+        title: "确认删除？",
+        text: "该操作将删除模板且无法撤销。",
         type: "warning",
         animation: false,
         showCancelButton: true,
-        confirmButtonText: "Delete " + escapeHtml(templates[idx].name),
+        confirmButtonText: "删除 " + escapeHtml(templates[idx].name),
+        cancelButtonText: "取消",
         confirmButtonColor: "#428bca",
         reverseButtons: true,
         allowOutsideClick: false,
@@ -104,19 +105,19 @@ var deleteTemplate = function (idx) {
     }).then(function (result) {
         if(result.value) {
             Swal.fire(
-                'Template Deleted!',
-                'This template has been deleted!',
+                '模板已删除！',
+                '该模板已删除。',
                 'success'
             );
         }
-        $('button:contains("OK")').on('click', function () {
+        $(".swal2-confirm").on("click", function () {
             location.reload()
         })
     })
 }
 
 function deleteTemplate(idx) {
-    if (confirm("Delete " + templates[idx].name + "?")) {
+    if (confirm("确认删除模板：" + templates[idx].name + "？")) {
         api.templateId.delete(templates[idx].id)
             .success(function (data) {
                 successFlash(data.message)
@@ -187,7 +188,7 @@ function edit(idx) {
         attachments: []
     }
     if (idx != -1) {
-        $("#templateModalLabel").text("Edit Template")
+        $("#templateModalLabel").text("编辑模板")
         template = templates[idx]
         $("#name").val(template.name)
         $("#subject").val(template.subject)
@@ -214,7 +215,7 @@ function edit(idx) {
         }
 
     } else {
-        $("#templateModalLabel").text("New Template")
+        $("#templateModalLabel").text("新建模板")
     }
     // Handle Deletion
     $("#attachmentsTable").unbind('click').on("click", "span>i.fa-trash-o", function () {
@@ -250,7 +251,7 @@ function copy(idx) {
         attachments: []
     }
     template = templates[idx]
-    $("#name").val("Copy of " + template.name)
+    $("#name").val("复制 " + template.name)
     $("#subject").val(template.subject)
     $("#envelope-sender").val(template.envelope_sender)
     $("#html_editor").val(template.html)
@@ -283,7 +284,7 @@ function importEmail() {
     raw = $("#email_content").val()
     convert_links = $("#convert_links_checkbox").prop("checked")
     if (!raw) {
-        modalError("No Content Specified!")
+        modalError("未填写内容！")
     } else {
         api.import_email({
                 content: raw,
@@ -328,14 +329,14 @@ function load() {
                 $.each(templates, function (i, template) {
                     templateRows.push([
                         escapeHtml(template.name),
-                        moment(template.modified_date).format('MMMM Do YYYY, h:mm:ss a'),
-                        "<div class='pull-right'><span data-toggle='modal' data-backdrop='static' data-target='#modal'><button class='btn btn-primary' data-toggle='tooltip' data-placement='left' title='Edit Template' onclick='edit(" + i + ")'>\
+                        moment(template.modified_date).format('YYYY-MM-DD HH:mm:ss'),
+                        "<div class='pull-right'><span data-toggle='modal' data-backdrop='static' data-target='#modal'><button class='btn btn-primary' data-toggle='tooltip' data-placement='left' title='编辑模板' onclick='edit(" + i + ")'>\
                     <i class='fa fa-pencil'></i>\
                     </button></span>\
-		    <span data-toggle='modal' data-target='#modal'><button class='btn btn-primary' data-toggle='tooltip' data-placement='left' title='Copy Template' onclick='copy(" + i + ")'>\
+		    <span data-toggle='modal' data-target='#modal'><button class='btn btn-primary' data-toggle='tooltip' data-placement='left' title='复制模板' onclick='copy(" + i + ")'>\
                     <i class='fa fa-copy'></i>\
                     </button></span>\
-                    <button class='btn btn-danger' data-toggle='tooltip' data-placement='left' title='Delete Template' onclick='deleteTemplate(" + i + ")'>\
+                    <button class='btn btn-danger' data-toggle='tooltip' data-placement='left' title='删除模板' onclick='deleteTemplate(" + i + ")'>\
                     <i class='fa fa-trash-o'></i>\
                     </button></div>"
                     ])
@@ -348,7 +349,7 @@ function load() {
         })
         .error(function () {
             $("#loading").hide()
-            errorFlash("Error fetching templates")
+            errorFlash("获取模板失败")
         })
 }
 

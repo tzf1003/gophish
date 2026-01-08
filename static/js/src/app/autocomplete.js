@@ -1,47 +1,47 @@
 var TEMPLATE_TAGS = [{
         id: 1,
         name: 'RId',
-        description: 'The unique ID for the recipient.'
+        description: '收件人的唯一 ID。'
     },
     {
         id: 2,
         name: 'FirstName',
-        description: 'The recipient\'s first name.'
+        description: '收件人的名。'
     },
     {
         id: 3,
         name: 'LastName',
-        description: 'The recipient\'s last name.'
+        description: '收件人的姓。'
     },
     {
         id: 4,
         name: 'Position',
-        description: 'The recipient\'s position.'
+        description: '收件人的职位。'
     },
     {
         id: 5,
         name: 'From',
-        description: 'The address emails are sent from.'
+        description: '邮件的发件地址。'
     },
     {
         id: 6,
         name: 'TrackingURL',
-        description: 'The URL to track emails being opened.'
+        description: '用于追踪邮件打开的 URL。'
     },
     {
         id: 7,
         name: 'Tracker',
-        description: 'An HTML tag that adds a hidden tracking image (recommended instead of TrackingURL).'
+        description: '添加隐藏追踪图的 HTML 标签（建议替代 TrackingURL）。'
     },
     {
         id: 8,
         name: 'URL',
-        description: 'The URL to your Gophish listener.'
+        description: 'Gophish 监听地址。'
     },
     {
         id: 9,
         name: 'BaseURL',
-        description: 'The base URL with the path and rid parameter stripped. Useful for making links to static files.'
+        description: '去除路径与 rid 参数后的基础 URL，可用于静态文件链接。'
     }
 ];
 

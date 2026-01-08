@@ -4,7 +4,7 @@ let users = []
 const save = (id) => {
     // Validate that the passwords match
     if ($("#password").val() !== $("#confirm_password").val()) {
-        modalError("Passwords must match.")
+        modalError("两次密码不一致。")
         return
     }
     let user = {
@@ -21,7 +21,7 @@ const save = (id) => {
         user.id = id
         api.userId.put(user)
             .success((data) => {
-                successFlash("User " + escapeHtml(user.username) + " updated successfully!")
+                successFlash("用户 " + escapeHtml(user.username) + " 更新成功！")
                 load()
                 dismiss()
                 $("#modal").modal('hide')
@@ -34,7 +34,7 @@ const save = (id) => {
         // to /user
         api.users.post(user)
             .success((data) => {
-                successFlash("User " + escapeHtml(user.username) + " registered successfully!")
+                successFlash("用户 " + escapeHtml(user.username) + " 创建成功！")
                 load()
                 dismiss()
                 $("#modal").modal('hide')
@@ -62,11 +62,11 @@ const edit = (id) => {
     })
     $("#role").select2()
     if (id == -1) {
-        $("#userModalLabel").text("New User")
+        $("#userModalLabel").text("新建用户")
         $("#role").val("user")
         $("#role").trigger("change")
     } else {
-        $("#userModalLabel").text("Edit User")
+        $("#userModalLabel").text("编辑用户")
         api.userId.get(id)
             .success((user) => {
                 $("#username").val(user.username)
@@ -79,7 +79,7 @@ const edit = (id) => {
                 }
             })
             .error(function () {
-                errorFlash("Error fetching user")
+                errorFlash("获取用户失败")
             })
     }
 }
@@ -91,19 +91,20 @@ const deleteUser = (id) => {
     }
     if (user.username == "admin") {
         Swal.fire({
-            title: "Unable to Delete User",
-            text: "The user account " + escapeHtml(user.username) + " cannot be deleted.",
+            title: "无法删除用户",
+            text: "用户账号 " + escapeHtml(user.username) + " 无法删除。",
             type: "info"
         });
         return
     }
     Swal.fire({
-        title: "Are you sure?",
-        text: "This will delete the account for " + escapeHtml(user.username) + " as well as all of the objects they have created.\n\nThis can't be undone!",
+        title: "确认删除？",
+        text: "该操作将删除账号 " + escapeHtml(user.username) + " 及其创建的所有对象。\n\n此操作不可撤销！",
         type: "warning",
         animation: false,
         showCancelButton: true,
-        confirmButtonText: "Delete",
+        confirmButtonText: "删除",
+        cancelButtonText: "取消",
         confirmButtonColor: "#428bca",
         reverseButtons: true,
         allowOutsideClick: false,
@@ -124,12 +125,12 @@ const deleteUser = (id) => {
     }).then(function (result) {
         if (result.value){
             Swal.fire(
-                'User Deleted!',
-                "The user account for " + escapeHtml(user.username) + " and all associated objects have been deleted!",
+                '用户已删除！',
+                "账号 " + escapeHtml(user.username) + " 及其相关对象已删除！",
                 'success'
             );
         }
-        $('button:contains("OK")').on('click', function () {
+        $(".swal2-confirm").on("click", function () {
             location.reload()
         })
     })
@@ -141,12 +142,13 @@ const impersonate = (id) => {
         return
     }
     Swal.fire({
-        title: "Are you sure?",
-        html: "You will be logged out of your account and logged in as <strong>" + escapeHtml(user.username) + "</strong>",
+        title: "确认切换？",
+        html: "你将退出当前账号并以 <strong>" + escapeHtml(user.username) + "</strong> 登录。",
         type: "warning",
         animation: false,
         showCancelButton: true,
-        confirmButtonText: "Swap User",
+        confirmButtonText: "切换用户",
+        cancelButtonText: "取消",
         confirmButtonColor: "#428bca",
         reverseButtons: true,
         allowOutsideClick: false,
@@ -162,11 +164,11 @@ const impersonate = (id) => {
           }).then((response) => {
                 if (response.status == 200) {
                     Swal.fire({
-                        title: "Success!",
-                        html: "Successfully changed to user <strong>" + escapeHtml(user.username) + "</strong>.",
+                        title: "成功！",
+                        html: "已切换到用户 <strong>" + escapeHtml(user.username) + "</strong>。",
                         type: "success",
                         showCancelButton: false,
-                        confirmButtonText: "Home",
+                        confirmButtonText: "首页",
                         allowOutsideClick: false,
                     }).then((result) => {
                         if (result.value) {
@@ -174,9 +176,9 @@ const impersonate = (id) => {
                         }});
                 } else {
                     Swal.fire({
-                        title: "Error!",
+                        title: "错误！",
                         type: "error",
-                        html: "Failed to change to user <strong>" + escapeHtml(user.username) + "</strong>.",
+                        html: "无法切换到用户 <strong>" + escapeHtml(user.username) + "</strong>。",
                         showCancelButton: false,
                     })
                 }
@@ -205,7 +207,7 @@ const load = () => {
             $.each(users, (i, user) => {
                 lastlogin = ""
                 if (user.last_login != "0001-01-01T00:00:00Z") {
-                    lastlogin = moment(user.last_login).format('MMMM Do YYYY, h:mm:ss a')
+                    lastlogin = moment(user.last_login).format('YYYY-MM-DD HH:mm:ss')
                 }
                 userRows.push([
                     escapeHtml(user.username),
@@ -226,7 +228,7 @@ const load = () => {
             userTable.rows.add(userRows).draw();
         })
         .error(() => {
-            errorFlash("Error fetching users")
+            errorFlash("获取用户失败")
         })
 }
 

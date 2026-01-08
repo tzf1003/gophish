@@ -22,7 +22,7 @@ function save(id) {
         group.id = id
         api.groupId.put(group)
             .success(function (data) {
-                successFlash("Group updated successfully!")
+                successFlash("分组更新成功！")
                 load()
                 dismiss()
                 $("#modal").modal('hide')
@@ -35,7 +35,7 @@ function save(id) {
         // to /groups
         api.groups.post(group)
             .success(function (data) {
-                successFlash("Group added successfully!")
+                successFlash("分组创建成功！")
                 load()
                 dismiss()
                 $("#modal").modal('hide')
@@ -64,10 +64,10 @@ function edit(id) {
         save(id)
     })
     if (id == -1) {
-        $("#groupModalLabel").text("New Group");
+        $("#groupModalLabel").text("新建分组");
         var group = {}
     } else {
-        $("#groupModalLabel").text("Edit Group");
+        $("#groupModalLabel").text("编辑分组");
         api.groupId.get(id)
             .success(function (group) {
                 $("#name").val(group.name)
@@ -84,7 +84,7 @@ function edit(id) {
                 targets.DataTable().rows.add(targetRows).draw()
             })
             .error(function () {
-                errorFlash("Error fetching group")
+                errorFlash("获取分组失败")
             })
     }
     // Handle file uploads
@@ -99,7 +99,7 @@ function edit(id) {
             var acceptFileTypes = /(csv|txt)$/i;
             var filename = data.originalFiles[0]['name']
             if (filename && !acceptFileTypes.test(filename.split(".").pop())) {
-                modalError("Unsupported file extension (use .csv or .txt)")
+                modalError("不支持的文件扩展名（请使用 .csv 或 .txt）")
                 return false;
             }
             data.submit();
@@ -151,12 +151,13 @@ var deleteGroup = function (id) {
         return
     }
     Swal.fire({
-        title: "Are you sure?",
-        text: "This will delete the group. This can't be undone!",
+        title: "确认删除？",
+        text: "该操作将删除分组且无法撤销。",
         type: "warning",
         animation: false,
         showCancelButton: true,
-        confirmButtonText: "Delete " + escapeHtml(group.name),
+        confirmButtonText: "删除 " + escapeHtml(group.name),
+        cancelButtonText: "取消",
         confirmButtonColor: "#428bca",
         reverseButtons: true,
         allowOutsideClick: false,
@@ -174,12 +175,12 @@ var deleteGroup = function (id) {
     }).then(function (result) {
         if (result.value){
             Swal.fire(
-                'Group Deleted!',
-                'This group has been deleted!',
+                '分组已删除！',
+                '该分组已删除。',
                 'success'
             );
         }
-        $('button:contains("OK")').on('click', function () {
+        $(".swal2-confirm").on("click", function () {
             location.reload()
         })
     })
@@ -240,7 +241,7 @@ function load() {
                     groupRows.push([
                         escapeHtml(group.name),
                         escapeHtml(group.num_targets),
-                        moment(group.modified_date).format('MMMM Do YYYY, h:mm:ss a'),
+                        moment(group.modified_date).format('YYYY-MM-DD HH:mm:ss'),
                         "<div class='pull-right'><button class='btn btn-primary' data-toggle='modal' data-backdrop='static' data-target='#modal' onclick='edit(" + group.id + ")'>\
                     <i class='fa fa-pencil'></i>\
                     </button>\
@@ -255,7 +256,7 @@ function load() {
             }
         })
         .error(function () {
-            errorFlash("Error fetching groups")
+            errorFlash("获取分组失败")
         })
 }
 

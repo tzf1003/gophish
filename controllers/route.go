@@ -199,49 +199,49 @@ func newTemplateParams(r *http.Request) templateParams {
 // Base handles the default path and template execution
 func (as *AdminServer) Base(w http.ResponseWriter, r *http.Request) {
 	params := newTemplateParams(r)
-	params.Title = "Dashboard"
+	params.Title = "仪表盘"
 	getTemplate(w, "dashboard").ExecuteTemplate(w, "base", params)
 }
 
 // Campaigns handles the default path and template execution
 func (as *AdminServer) Campaigns(w http.ResponseWriter, r *http.Request) {
 	params := newTemplateParams(r)
-	params.Title = "Campaigns"
+	params.Title = "活动"
 	getTemplate(w, "campaigns").ExecuteTemplate(w, "base", params)
 }
 
 // CampaignID handles the default path and template execution
 func (as *AdminServer) CampaignID(w http.ResponseWriter, r *http.Request) {
 	params := newTemplateParams(r)
-	params.Title = "Campaign Results"
+	params.Title = "活动结果"
 	getTemplate(w, "campaign_results").ExecuteTemplate(w, "base", params)
 }
 
 // Templates handles the default path and template execution
 func (as *AdminServer) Templates(w http.ResponseWriter, r *http.Request) {
 	params := newTemplateParams(r)
-	params.Title = "Email Templates"
+	params.Title = "邮件模板"
 	getTemplate(w, "templates").ExecuteTemplate(w, "base", params)
 }
 
 // Groups handles the default path and template execution
 func (as *AdminServer) Groups(w http.ResponseWriter, r *http.Request) {
 	params := newTemplateParams(r)
-	params.Title = "Users & Groups"
+	params.Title = "用户与分组"
 	getTemplate(w, "groups").ExecuteTemplate(w, "base", params)
 }
 
 // LandingPages handles the default path and template execution
 func (as *AdminServer) LandingPages(w http.ResponseWriter, r *http.Request) {
 	params := newTemplateParams(r)
-	params.Title = "Landing Pages"
+	params.Title = "落地页"
 	getTemplate(w, "landing_pages").ExecuteTemplate(w, "base", params)
 }
 
 // SendingProfiles handles the default path and template execution
 func (as *AdminServer) SendingProfiles(w http.ResponseWriter, r *http.Request) {
 	params := newTemplateParams(r)
-	params.Title = "Sending Profiles"
+	params.Title = "发送配置"
 	getTemplate(w, "sending_profiles").ExecuteTemplate(w, "base", params)
 }
 
@@ -250,7 +250,7 @@ func (as *AdminServer) Settings(w http.ResponseWriter, r *http.Request) {
 	switch {
 	case r.Method == "GET":
 		params := newTemplateParams(r)
-		params.Title = "Settings"
+		params.Title = "设置"
 		session := ctx.Get(r, "session").(*sessions.Session)
 		session.Save(r, w)
 		getTemplate(w, "settings").ExecuteTemplate(w, "base", params)
@@ -261,7 +261,7 @@ func (as *AdminServer) Settings(w http.ResponseWriter, r *http.Request) {
 		confirmPassword := r.FormValue("confirm_new_password")
 		// Check the current password
 		err := auth.ValidatePassword(currentPw, u.Hash)
-		msg := models.Response{Success: true, Message: "Settings Updated Successfully"}
+		msg := models.Response{Success: true, Message: "设置已成功更新"}
 		if err != nil {
 			msg.Message = err.Error()
 			msg.Success = false
@@ -290,7 +290,7 @@ func (as *AdminServer) Settings(w http.ResponseWriter, r *http.Request) {
 // and management of user accounts within Gophish.
 func (as *AdminServer) UserManagement(w http.ResponseWriter, r *http.Request) {
 	params := newTemplateParams(r)
-	params.Title = "User Management"
+	params.Title = "用户管理"
 	getTemplate(w, "users").ExecuteTemplate(w, "base", params)
 }
 
@@ -314,7 +314,7 @@ func (as *AdminServer) handleInvalidLogin(w http.ResponseWriter, r *http.Request
 		Title   string
 		Flashes []interface{}
 		Token   string
-	}{Title: "Login", Token: csrf.Token(r)}
+	}{Title: "登录", Token: csrf.Token(r)}
 	params.Flashes = session.Flashes()
 	session.Save(r, w)
 	templates := template.New("template")
@@ -330,7 +330,7 @@ func (as *AdminServer) handleInvalidLogin(w http.ResponseWriter, r *http.Request
 // Webhooks is an admin-only handler that handles webhooks
 func (as *AdminServer) Webhooks(w http.ResponseWriter, r *http.Request) {
 	params := newTemplateParams(r)
-	params.Title = "Webhooks"
+	params.Title = "Webhook"
 	getTemplate(w, "webhooks").ExecuteTemplate(w, "base", params)
 }
 
@@ -360,7 +360,7 @@ func (as *AdminServer) Login(w http.ResponseWriter, r *http.Request) {
 		Title   string
 		Flashes []interface{}
 		Token   string
-	}{Title: "Login", Token: csrf.Token(r)}
+	}{Title: "登录", Token: csrf.Token(r)}
 	session := ctx.Get(r, "session").(*sessions.Session)
 	switch {
 	case r.Method == "GET":
@@ -378,18 +378,18 @@ func (as *AdminServer) Login(w http.ResponseWriter, r *http.Request) {
 		u, err := models.GetUserByUsername(username)
 		if err != nil {
 			log.Error(err)
-			as.handleInvalidLogin(w, r, "Invalid Username/Password")
+			as.handleInvalidLogin(w, r, "用户名或密码错误")
 			return
 		}
 		// Validate the user's password
 		err = auth.ValidatePassword(password, u.Hash)
 		if err != nil {
 			log.Error(err)
-			as.handleInvalidLogin(w, r, "Invalid Username/Password")
+			as.handleInvalidLogin(w, r, "用户名或密码错误")
 			return
 		}
 		if u.AccountLocked {
-			as.handleInvalidLogin(w, r, "Account Locked")
+			as.handleInvalidLogin(w, r, "账号已锁定")
 			return
 		}
 		u.LastLogin = time.Now().UTC()
@@ -408,7 +408,7 @@ func (as *AdminServer) Login(w http.ResponseWriter, r *http.Request) {
 func (as *AdminServer) Logout(w http.ResponseWriter, r *http.Request) {
 	session := ctx.Get(r, "session").(*sessions.Session)
 	delete(session.Values, "id")
-	Flash(w, r, "success", "You have successfully logged out")
+	Flash(w, r, "success", "已成功退出登录")
 	session.Save(r, w)
 	http.Redirect(w, r, "/login", http.StatusFound)
 }
@@ -429,13 +429,13 @@ func (as *AdminServer) ResetPassword(w http.ResponseWriter, r *http.Request) {
 	u := ctx.Get(r, "user").(models.User)
 	session := ctx.Get(r, "session").(*sessions.Session)
 	if !u.PasswordChangeRequired {
-		Flash(w, r, "info", "Please reset your password through the settings page")
+		Flash(w, r, "info", "请在设置页面重置密码")
 		session.Save(r, w)
 		http.Redirect(w, r, "/settings", http.StatusTemporaryRedirect)
 		return
 	}
 	params := newTemplateParams(r)
-	params.Title = "Reset Password"
+	params.Title = "重置密码"
 	switch {
 	case r.Method == http.MethodGet:
 		params.Flashes = session.Flashes()

@@ -97,6 +97,26 @@ var statuses = {
     }
 }
 
+var statusDisplay = {
+    "Email Sent": "已发送",
+    "Emails Sent": "已发送",
+    "In progress": "进行中",
+    "Queued": "队列中",
+    "Completed": "已完成",
+    "Email Opened": "已打开",
+    "Clicked Link": "已点击",
+    "Success": "成功",
+    "Email Reported": "已上报",
+    "Error": "错误",
+    "Error Sending Email": "发送失败",
+    "Submitted Data": "已提交数据",
+    "Unknown": "未知",
+    "Sending": "发送中",
+    "Retrying": "重试中",
+    "Scheduled": "已计划",
+    "Campaign Created": "活动已创建"
+}
+
 var statusMapping = {
     "Email Sent": "sent",
     "Email Opened": "opened",
@@ -126,12 +146,13 @@ function dismiss() {
 // Deletes a campaign after prompting the user
 function deleteCampaign() {
     Swal.fire({
-        title: "Are you sure?",
-        text: "This will delete the campaign. This can't be undone!",
+        title: "确认删除？",
+        text: "该操作将删除活动且无法撤销。",
         type: "warning",
         animation: false,
         showCancelButton: true,
-        confirmButtonText: "Delete Campaign",
+        confirmButtonText: "删除活动",
+        cancelButtonText: "取消",
         confirmButtonColor: "#428bca",
         reverseButtons: true,
         allowOutsideClick: false,
@@ -150,12 +171,12 @@ function deleteCampaign() {
     }).then(function (result) {
         if(result.value){
             Swal.fire(
-                'Campaign Deleted!',
-                'This campaign has been deleted!',
+                '活动已删除！',
+                '该活动已删除。',
                 'success'
             );
         }
-        $('button:contains("OK")').on('click', function () {
+        $(".swal2-confirm").on("click", function () {
             location.href = '/campaigns'
         })
     })
@@ -164,12 +185,13 @@ function deleteCampaign() {
 // Completes a campaign after prompting the user
 function completeCampaign() {
     Swal.fire({
-        title: "Are you sure?",
-        text: "Gophish will stop processing events for this campaign",
+        title: "确认完成？",
+        text: "系统将停止处理该活动的事件。",
         type: "warning",
         animation: false,
         showCancelButton: true,
-        confirmButtonText: "Complete Campaign",
+        confirmButtonText: "完成活动",
+        cancelButtonText: "取消",
         confirmButtonColor: "#428bca",
         reverseButtons: true,
         allowOutsideClick: false,
@@ -188,12 +210,12 @@ function completeCampaign() {
     }).then(function (result) {
         if (result.value){
             Swal.fire(
-                'Campaign Completed!',
-                'This campaign has been completed!',
+                '活动已完成！',
+                '该活动已完成。',
                 'success'
             );
             $('#complete_button')[0].disabled = true;
-            $('#complete_button').text('Completed!')
+            $('#complete_button').text('已完成')
             doPoll = false;
         }
     })
@@ -260,9 +282,10 @@ function replay(event_idx) {
     /* Ensure we know where to send the user */
     // Prompt for the URL
     Swal.fire({
-        title: 'Where do you want the credentials submitted to?',
+        title: '凭据应提交到哪个地址？',
         input: 'text',
         showCancelButton: true,
+        cancelButtonText: "取消",
         inputPlaceholder: "http://example.com/login",
         inputValue: url || "",
         inputValidator: function (value) {
@@ -270,7 +293,7 @@ function replay(event_idx) {
                 if (value) {
                     resolve();
                 } else {
-                    reject('Invalid URL.');
+                    reject('URL 无效。');
                 }
             });
         }
@@ -316,7 +339,7 @@ var renderDevice = function (event_details) {
         if (deviceVendor == 'microsoft') deviceVendor = 'windows'
     }
 
-    var deviceName = 'Unknown'
+    var deviceName = '未知'
     if (ua.os.name) {
         deviceName = ua.os.name
         if (deviceName == "Mac OS") {
@@ -330,7 +353,7 @@ var renderDevice = function (event_details) {
     }
 
     if (ua.os.version) {
-        deviceName = deviceName + ' (OS Version: ' + ua.os.version + ')'
+        deviceName = deviceName + '（系统版本：' + ua.os.version + '）'
     }
 
     deviceString = '<div class="timeline-device-os"><span class="fa fa-stack">' +
@@ -340,7 +363,7 @@ var renderDevice = function (event_details) {
 
     detailsString += deviceString
 
-    var deviceBrowser = 'Unknown'
+    var deviceBrowser = '未知'
     var browserIcon = 'info-circle'
     var browserVersion = ''
 
@@ -352,7 +375,7 @@ var renderDevice = function (event_details) {
             browserIcon = deviceBrowser.toLowerCase()
             if (browserIcon == 'ie') browserIcon = 'internet-explorer'
         }
-        browserVersion = '(Version: ' + ua.browser.version + ')'
+        browserVersion = '（版本：' + ua.browser.version + '）'
     }
 
     var browserString = '<div class="timeline-device-browser"><span class="fa fa-stack">' +
@@ -376,20 +399,21 @@ function renderTimeline(data) {
         "send_date": data[8]
     }
     results = '<div class="timeline col-sm-12 well well-lg">' +
-        '<h6>Timeline for ' + escapeHtml(record.first_name) + ' ' + escapeHtml(record.last_name) +
-        '</h6><span class="subtitle">Email: ' + escapeHtml(record.email) +
-        '<br>Result ID: ' + escapeHtml(record.id) + '</span>' +
+        '<h6>时间线：' + escapeHtml(record.first_name) + ' ' + escapeHtml(record.last_name) +
+        '</h6><span class="subtitle">邮箱：' + escapeHtml(record.email) +
+        '<br>结果 ID：' + escapeHtml(record.id) + '</span>' +
         '<div class="timeline-graph col-sm-6">'
     $.each(campaign.timeline, function (i, event) {
         if (!event.email || event.email == record.email) {
+            var eventLabel = statusDisplay[event.message] || event.message;
             // Add the event
             results += '<div class="timeline-entry">' +
                 '    <div class="timeline-bar"></div>'
             results +=
                 '    <div class="timeline-icon ' + statuses[event.message].label + '">' +
                 '    <i class="fa ' + statuses[event.message].icon + '"></i></div>' +
-                '    <div class="timeline-message">' + escapeHtml(event.message) +
-                '    <span class="timeline-date">' + moment.utc(event.time).local().format('MMMM Do YYYY h:mm:ss a') + '</span>'
+                '    <div class="timeline-message">' + escapeHtml(eventLabel) +
+                '    <span class="timeline-date">' + moment.utc(event.time).local().format('YYYY-MM-DD HH:mm:ss') + '</span>'
             if (event.details) {
                 details = JSON.parse(event.details)
                 if (event.message == "Clicked Link" || event.message == "Submitted Data") {
@@ -400,13 +424,13 @@ function renderTimeline(data) {
                 }
                 if (event.message == "Submitted Data") {
                     results += '<div class="timeline-replay-button"><button onclick="replay(' + i + ')" class="btn btn-success">'
-                    results += '<i class="fa fa-refresh"></i> Replay Credentials</button></div>'
-                    results += '<div class="timeline-event-details"><i class="fa fa-caret-right"></i> View Details</div>'
+                    results += '<i class="fa fa-refresh"></i> 重放凭据</button></div>'
+                    results += '<div class="timeline-event-details"><i class="fa fa-caret-right"></i> 查看详情</div>'
                 }
                 if (details.payload) {
                     results += '<div class="timeline-event-results">'
                     results += '    <table class="table table-condensed table-bordered table-striped">'
-                    results += '        <thead><tr><th>Parameter</th><th>Value(s)</tr></thead><tbody>'
+                    results += '        <thead><tr><th>参数</th><th>值</tr></thead><tbody>'
                     $.each(Object.keys(details.payload), function (i, param) {
                         if (param == "rid") {
                             return true;
@@ -420,9 +444,9 @@ function renderTimeline(data) {
                     results += '</div>'
                 }
                 if (details.error) {
-                    results += '<div class="timeline-event-details"><i class="fa fa-caret-right"></i> View Details</div>'
+                    results += '<div class="timeline-event-details"><i class="fa fa-caret-right"></i> 查看详情</div>'
                     results += '<div class="timeline-event-results">'
-                    results += '<span class="label label-default">Error</span> ' + details.error
+                    results += '<span class="label label-default">错误</span> ' + details.error
                     results += '</div>'
                 }
             }
@@ -436,7 +460,7 @@ function renderTimeline(data) {
         results +=
             '    <div class="timeline-icon ' + statuses[record.status].label + '">' +
             '    <i class="fa ' + statuses[record.status].icon + '"></i></div>' +
-            '    <div class="timeline-message">' + "Scheduled to send at " + record.send_date + '</span>'
+            '    <div class="timeline-message">' + "计划发送时间：" + record.send_date + '</span>'
     }
     results += '</div></div>'
     return results
@@ -450,17 +474,17 @@ var renderTimelineChart = function (chartopts) {
             height: "200px"
         },
         title: {
-            text: 'Campaign Timeline'
+            text: '活动时间线'
         },
         xAxis: {
             type: 'datetime',
             dateTimeLabelFormats: {
-                second: '%l:%M:%S',
-                minute: '%l:%M',
-                hour: '%l:%M',
-                day: '%b %d, %Y',
-                week: '%b %d, %Y',
-                month: '%b %Y'
+                second: '%H:%M:%S',
+                minute: '%H:%M',
+                hour: '%H:%M',
+                day: '%Y-%m-%d',
+                week: '%Y-%m-%d',
+                month: '%Y-%m'
             }
         },
         yAxis: {
@@ -477,8 +501,9 @@ var renderTimelineChart = function (chartopts) {
         },
         tooltip: {
             formatter: function () {
-                return Highcharts.dateFormat('%A, %b %d %l:%M:%S %P', new Date(this.x)) +
-                    '<br>Event: ' + this.point.message + '<br>Email: <b>' + this.point.email + '</b>'
+                var eventLabel = statusDisplay[this.point.message] || this.point.message
+                return Highcharts.dateFormat('%Y-%m-%d %H:%M:%S', new Date(this.x)) +
+                    '<br>事件：' + eventLabel + '<br>邮箱：<b>' + this.point.email + '</b>'
             }
         },
         legend: {
@@ -613,11 +638,12 @@ var updateMap = function (results) {
  */
 function createStatusLabel(status, send_date) {
     var label = statuses[status].label || "label-default";
-    var statusColumn = "<span class=\"label " + label + "\">" + status + "</span>"
+    var statusText = statusDisplay[status] || status;
+    var statusColumn = "<span class=\"label " + label + "\">" + statusText + "</span>"
     // Add the tooltip if the email is scheduled to be sent
     if (status == "Scheduled" || status == "Retrying") {
-        var sendDateMessage = "Scheduled to send at " + send_date
-        statusColumn = "<span class=\"label " + label + "\" data-toggle=\"tooltip\" data-placement=\"top\" data-html=\"true\" title=\"" + sendDateMessage + "\">" + status + "</span>"
+        var sendDateMessage = "计划发送时间：" + send_date
+        statusColumn = "<span class=\"label " + label + "\" data-toggle=\"tooltip\" data-placement=\"top\" data-html=\"true\" title=\"" + sendDateMessage + "\">" + statusText + "</span>"
     }
     return statusColumn
 }
@@ -674,8 +700,9 @@ function poll() {
                 if (!(status in statusMapping)) {
                     return true
                 }
+                var displayStatus = statusDisplay[status] || status
                 email_data.push({
-                    name: status,
+                    name: displayStatus,
                     y: Math.floor((count / campaign.results.length) * 100),
                     count: count
                 })
@@ -697,7 +724,7 @@ function poll() {
                 var rid = rowData[0]
                 $.each(campaign.results, function (j, result) {
                     if (result.id == rid) {
-                        rowData[8] = moment(result.send_date).format('MMMM Do YYYY, h:mm:ss a')
+                        rowData[8] = moment(result.send_date).format('YYYY-MM-DD HH:mm:ss')
                         rowData[7] = result.reported
                         rowData[6] = result.status
                         resultsTable.row(i).data(rowData)
@@ -730,10 +757,10 @@ function load() {
                 $("#loading").hide()
                 $("#campaignResults").show()
                 // Set the title
-                $("#page-title").text("Results for " + c.name)
+                $("#page-title").text("活动结果：" + c.name)
                 if (c.status == "Completed") {
                     $('#complete_button')[0].disabled = true;
-                    $('#complete_button').text('Completed!');
+                    $('#complete_button').text('已完成');
                     doPoll = false;
                 }
                 // Setup viewing the details of a result
@@ -803,7 +830,7 @@ function load() {
                         escapeHtml(result.position) || "",
                         result.status,
                         result.reported,
-                        moment(result.send_date).format('MMMM Do YYYY, h:mm:ss a')
+                        moment(result.send_date).format('YYYY-MM-DD HH:mm:ss')
                     ])
                     email_series_data[result.status]++;
                     if (result.reported) {
@@ -860,8 +887,9 @@ function load() {
                     if (!(status in statusMapping)) {
                         return true
                     }
+                    var displayStatus = statusDisplay[status] || status
                     email_data.push({
-                        name: status,
+                        name: displayStatus,
                         y: Math.floor((count / campaign.results.length) * 100),
                         count: count
                     })
@@ -871,7 +899,7 @@ function load() {
                     })
                     var chart = renderPieChart({
                         elemId: statusMapping[status] + '_chart',
-                        title: status,
+                        title: displayStatus,
                         name: status,
                         data: email_data,
                         colors: [statuses[status].color, '#dddddd']
@@ -901,7 +929,7 @@ function load() {
         })
         .error(function () {
             $("#loading").hide()
-            errorFlash(" Campaign not found!")
+            errorFlash("未找到活动！")
         })
 }
 
@@ -920,12 +948,13 @@ function refresh() {
 
 function report_mail(rid, cid) {
     Swal.fire({
-        title: "Are you sure?",
-        text: "This result will be flagged as reported (RID: " + rid + ")",
+        title: "确认上报？",
+        text: "该结果将被标记为已上报（RID: " + rid + "）",
         type: "question",
         animation: false,
         showCancelButton: true,
-        confirmButtonText: "Continue",
+        confirmButtonText: "继续",
+        cancelButtonText: "取消",
         confirmButtonColor: "#428bca",
         reverseButtons: true,
         allowOutsideClick: false,
@@ -939,20 +968,20 @@ function report_mail(rid, cid) {
                 fetch(report_url)
                 .then(response => {
                     if (!response.ok) {
-                        throw new Error(`HTTP error! Status: ${response.status}`);
+                        throw new Error(`HTTP 错误！状态：${response.status}`);
                     }
                     refresh();
                 })
                 .catch(error => {
                     let errorMessage = error.message;
                     if (error.message === "Failed to fetch") {
-                        errorMessage = "This might be due to Mixed Content issues or network problems.";
+                        errorMessage = "可能是混合内容或网络问题导致。";
                     }
                     Swal.fire({
-                        title: 'Error',
+                        title: '错误',
                         text: errorMessage,
                         type: 'error',
-                        confirmButtonText: 'Close'
+                        confirmButtonText: '关闭'
                     });
                 });
             }));

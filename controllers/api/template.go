@@ -28,12 +28,12 @@ func (as *Server) Templates(w http.ResponseWriter, r *http.Request) {
 		// Put the request into a template
 		err := json.NewDecoder(r.Body).Decode(&t)
 		if err != nil {
-			JSONResponse(w, models.Response{Success: false, Message: "Invalid JSON structure"}, http.StatusBadRequest)
+			JSONResponse(w, models.Response{Success: false, Message: "无效的 JSON 结构"}, http.StatusBadRequest)
 			return
 		}
 		_, err = models.GetTemplateByName(t.Name, ctx.Get(r, "user_id").(int64))
 		if err != gorm.ErrRecordNotFound {
-			JSONResponse(w, models.Response{Success: false, Message: "Template name already in use"}, http.StatusConflict)
+			JSONResponse(w, models.Response{Success: false, Message: "模板名称已被使用"}, http.StatusConflict)
 			return
 		}
 		t.ModifiedDate = time.Now().UTC()
@@ -48,7 +48,7 @@ func (as *Server) Templates(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 		if err != nil {
-			JSONResponse(w, models.Response{Success: false, Message: "Error inserting template into database"}, http.StatusInternalServerError)
+			JSONResponse(w, models.Response{Success: false, Message: "写入模板到数据库失败"}, http.StatusInternalServerError)
 			log.Error(err)
 			return
 		}
@@ -62,7 +62,7 @@ func (as *Server) Template(w http.ResponseWriter, r *http.Request) {
 	id, _ := strconv.ParseInt(vars["id"], 0, 64)
 	t, err := models.GetTemplate(id, ctx.Get(r, "user_id").(int64))
 	if err != nil {
-		JSONResponse(w, models.Response{Success: false, Message: "Template not found"}, http.StatusNotFound)
+		JSONResponse(w, models.Response{Success: false, Message: "模板不存在"}, http.StatusNotFound)
 		return
 	}
 	switch {
@@ -71,10 +71,10 @@ func (as *Server) Template(w http.ResponseWriter, r *http.Request) {
 	case r.Method == "DELETE":
 		err = models.DeleteTemplate(id, ctx.Get(r, "user_id").(int64))
 		if err != nil {
-			JSONResponse(w, models.Response{Success: false, Message: "Error deleting template"}, http.StatusInternalServerError)
+			JSONResponse(w, models.Response{Success: false, Message: "删除模板失败"}, http.StatusInternalServerError)
 			return
 		}
-		JSONResponse(w, models.Response{Success: true, Message: "Template deleted successfully!"}, http.StatusOK)
+		JSONResponse(w, models.Response{Success: true, Message: "模板已删除"}, http.StatusOK)
 	case r.Method == "PUT":
 		t = models.Template{}
 		err = json.NewDecoder(r.Body).Decode(&t)
@@ -82,7 +82,7 @@ func (as *Server) Template(w http.ResponseWriter, r *http.Request) {
 			log.Error(err)
 		}
 		if t.Id != id {
-			JSONResponse(w, models.Response{Success: false, Message: "Error: /:id and template_id mismatch"}, http.StatusBadRequest)
+			JSONResponse(w, models.Response{Success: false, Message: "错误：/:id 与 template_id 不匹配"}, http.StatusBadRequest)
 			return
 		}
 		t.ModifiedDate = time.Now().UTC()

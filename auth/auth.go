@@ -16,23 +16,23 @@ const MinPasswordLength = 8
 const APIKeyLength = 32
 
 // ErrInvalidPassword is thrown when a user provides an incorrect password.
-var ErrInvalidPassword = errors.New("Invalid Password")
+var ErrInvalidPassword = errors.New("密码无效")
 
 // ErrPasswordMismatch is thrown when a user provides a mismatching password
 // and confirmation password.
-var ErrPasswordMismatch = errors.New("Passwords do not match")
+var ErrPasswordMismatch = errors.New("两次密码不一致")
 
 // ErrReusedPassword is thrown when a user attempts to change their password to
 // the existing password
-var ErrReusedPassword = errors.New("Cannot reuse existing password")
+var ErrReusedPassword = errors.New("不能重复使用旧密码")
 
 // ErrEmptyPassword is thrown when a user provides a blank password to the register
 // or change password functions
-var ErrEmptyPassword = errors.New("No password provided")
+var ErrEmptyPassword = errors.New("未提供密码")
 
 // ErrPasswordTooShort is thrown when a user provides a password that is less
 // than MinPasswordLength
-var ErrPasswordTooShort = fmt.Errorf("Password must be at least %d characters", MinPasswordLength)
+var ErrPasswordTooShort = fmt.Errorf("密码长度至少为 %d 个字符", MinPasswordLength)
 
 // GenerateSecureKey returns the hex representation of key generated from n
 // random bytes

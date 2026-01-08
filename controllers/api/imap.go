@@ -14,12 +14,12 @@ import (
 func (as *Server) IMAPServerValidate(w http.ResponseWriter, r *http.Request) {
 	switch {
 	case r.Method == "GET":
-		JSONResponse(w, models.Response{Success: false, Message: "Only POSTs allowed"}, http.StatusBadRequest)
+		JSONResponse(w, models.Response{Success: false, Message: "仅允许 POST 请求"}, http.StatusBadRequest)
 	case r.Method == "POST":
 		im := models.IMAP{}
 		err := json.NewDecoder(r.Body).Decode(&im)
 		if err != nil {
-			JSONResponse(w, models.Response{Success: false, Message: "Invalid request"}, http.StatusBadRequest)
+			JSONResponse(w, models.Response{Success: false, Message: "无效请求"}, http.StatusBadRequest)
 			return
 		}
 		err = imap.Validate(&im)
@@ -27,7 +27,7 @@ func (as *Server) IMAPServerValidate(w http.ResponseWriter, r *http.Request) {
 			JSONResponse(w, models.Response{Success: false, Message: err.Error()}, http.StatusOK)
 			return
 		}
-		JSONResponse(w, models.Response{Success: true, Message: "Successful login."}, http.StatusCreated)
+		JSONResponse(w, models.Response{Success: true, Message: "登录成功。"}, http.StatusCreated)
 	}
 }
 
@@ -47,7 +47,7 @@ func (as *Server) IMAPServer(w http.ResponseWriter, r *http.Request) {
 		im := models.IMAP{}
 		err := json.NewDecoder(r.Body).Decode(&im)
 		if err != nil {
-			JSONResponse(w, models.Response{Success: false, Message: "Invalid data. Please check your IMAP settings."}, http.StatusBadRequest)
+			JSONResponse(w, models.Response{Success: false, Message: "数据无效，请检查 IMAP 设置。"}, http.StatusBadRequest)
 			return
 		}
 		im.ModifiedDate = time.Now().UTC()
@@ -57,6 +57,6 @@ func (as *Server) IMAPServer(w http.ResponseWriter, r *http.Request) {
 			JSONResponse(w, models.Response{Success: false, Message: err.Error()}, http.StatusInternalServerError)
 			return
 		}
-		JSONResponse(w, models.Response{Success: true, Message: "Successfully saved IMAP settings."}, http.StatusCreated)
+		JSONResponse(w, models.Response{Success: true, Message: "IMAP 设置已保存。"}, http.StatusCreated)
 	}
 }

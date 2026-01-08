@@ -96,35 +96,35 @@ type EventError struct {
 }
 
 // ErrCampaignNameNotSpecified indicates there was no template given by the user
-var ErrCampaignNameNotSpecified = errors.New("Campaign name not specified")
+var ErrCampaignNameNotSpecified = errors.New("未指定活动名称")
 
 // ErrGroupNotSpecified indicates there was no template given by the user
-var ErrGroupNotSpecified = errors.New("No groups specified")
+var ErrGroupNotSpecified = errors.New("未指定分组")
 
 // ErrTemplateNotSpecified indicates there was no template given by the user
-var ErrTemplateNotSpecified = errors.New("No email template specified")
+var ErrTemplateNotSpecified = errors.New("未指定邮件模板")
 
 // ErrPageNotSpecified indicates a landing page was not provided for the campaign
-var ErrPageNotSpecified = errors.New("No landing page specified")
+var ErrPageNotSpecified = errors.New("未指定落地页")
 
 // ErrSMTPNotSpecified indicates a sending profile was not provided for the campaign
-var ErrSMTPNotSpecified = errors.New("No sending profile specified")
+var ErrSMTPNotSpecified = errors.New("未指定发送配置")
 
 // ErrTemplateNotFound indicates the template specified does not exist in the database
-var ErrTemplateNotFound = errors.New("Template not found")
+var ErrTemplateNotFound = errors.New("模板不存在")
 
 // ErrGroupNotFound indicates a group specified by the user does not exist in the database
-var ErrGroupNotFound = errors.New("Group not found")
+var ErrGroupNotFound = errors.New("分组不存在")
 
 // ErrPageNotFound indicates a page specified by the user does not exist in the database
-var ErrPageNotFound = errors.New("Page not found")
+var ErrPageNotFound = errors.New("页面不存在")
 
 // ErrSMTPNotFound indicates a sending profile specified by the user does not exist in the database
-var ErrSMTPNotFound = errors.New("Sending profile not found")
+var ErrSMTPNotFound = errors.New("发送配置不存在")
 
 // ErrInvalidSendByDate indicates that the user specified a send by date that occurs before the
 // launch date
-var ErrInvalidSendByDate = errors.New("The launch date must be before the \"send emails by\" date")
+var ErrInvalidSendByDate = errors.New("启动时间必须早于“最晚发送时间”")
 
 // RecipientParameter is the URL parameter that points to the result ID for a recipient.
 const RecipientParameter = "rid"

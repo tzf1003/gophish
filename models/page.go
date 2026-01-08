@@ -22,7 +22,7 @@ type Page struct {
 }
 
 // ErrPageNameNotSpecified is thrown if the name of the landing page is blank.
-var ErrPageNameNotSpecified = errors.New("Page Name not specified")
+var ErrPageNameNotSpecified = errors.New("未指定页面名称")
 
 // parseHTML parses the page HTML on save to handle the
 // capturing (or lack thereof!) of credentials and passwords

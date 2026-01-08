@@ -8,18 +8,27 @@ var labels = {
     "Error": "label-danger"
 }
 
+var statusDisplay = {
+    "In progress": "进行中",
+    "Queued": "队列中",
+    "Completed": "已完成",
+    "Emails Sent": "已发送",
+    "Error": "错误"
+}
+
 var campaigns = []
 var campaign = {}
 
 // Launch attempts to POST to /campaigns/
 function launch() {
     Swal.fire({
-        title: "Are you sure?",
-        text: "This will schedule the campaign to be launched.",
+        title: "确认启动？",
+        text: "该操作将安排活动按计划启动。",
         type: "question",
         animation: false,
         showCancelButton: true,
-        confirmButtonText: "Launch",
+        confirmButtonText: "启动",
+        cancelButtonText: "取消",
         confirmButtonColor: "#428bca",
         reverseButtons: true,
         allowOutsideClick: false,
@@ -35,7 +44,7 @@ function launch() {
                 // Validate our fields
                 var send_by_date = $("#send_by_date").val()
                 if (send_by_date != "") {
-                    send_by_date = moment(send_by_date, "MMMM Do YYYY, h:mm a").utc().format()
+                    send_by_date = moment(send_by_date, "YYYY-MM-DD HH:mm").utc().format()
                 }
                 campaign = {
                     name: $("#name").val(),
@@ -49,7 +58,7 @@ function launch() {
                     smtp: {
                         name: $("#profile").select2("data")[0].text
                     },
-                    launch_date: moment($("#launch_date").val(), "MMMM Do YYYY, h:mm a").utc().format(),
+                    launch_date: moment($("#launch_date").val(), "YYYY-MM-DD HH:mm").utc().format(),
                     send_by_date: send_by_date || null,
                     groups: groups,
                 }
@@ -69,12 +78,12 @@ function launch() {
     }).then(function (result) {
         if (result.value){
             Swal.fire(
-                'Campaign Scheduled!',
-                'This campaign has been scheduled for launch!',
+                '活动已安排！',
+                '该活动已安排启动。',
                 'success'
             );
         }
-        $('button:contains("OK")').on('click', function () {
+        $(".swal2-confirm").on("click", function () {
             window.location = "/campaigns/" + campaign.id.toString()
         })
     })
@@ -99,12 +108,12 @@ function sendTestEmail() {
         }
     }
     btnHtml = $("#sendTestModalSubmit").html()
-    $("#sendTestModalSubmit").html('<i class="fa fa-spinner fa-spin"></i> Sending')
+    $("#sendTestModalSubmit").html('<i class="fa fa-spinner fa-spin"></i> 发送中')
     // Send the test email
     api.send_test_email(test_email_request)
         .success(function (data) {
             $("#sendTestEmailModal\\.flashes").empty().append("<div style=\"text-align:center\" class=\"alert alert-success\">\
-            <i class=\"fa fa-check-circle\"></i> Email Sent!</div>")
+            <i class=\"fa fa-check-circle\"></i> 邮件已发送！</div>")
             $("#sendTestModalSubmit").html(btnHtml)
         })
         .error(function (data) {
@@ -127,12 +136,13 @@ function dismiss() {
 
 function deleteCampaign(idx) {
     Swal.fire({
-        title: "Are you sure?",
-        text: "This will delete the campaign. This can't be undone!",
+        title: "确认删除？",
+        text: "该操作将删除活动且无法撤销。",
         type: "warning",
         animation: false,
         showCancelButton: true,
-        confirmButtonText: "Delete " + campaigns[idx].name,
+        confirmButtonText: "删除 " + campaigns[idx].name,
+        cancelButtonText: "取消",
         confirmButtonColor: "#428bca",
         reverseButtons: true,
         allowOutsideClick: false,
@@ -150,12 +160,12 @@ function deleteCampaign(idx) {
     }).then(function (result) {
         if (result.value){
             Swal.fire(
-                'Campaign Deleted!',
-                'This campaign has been deleted!',
+                '活动已删除！',
+                '该活动已删除。',
                 'success'
             );
         }
-        $('button:contains("OK")').on('click', function () {
+        $(".swal2-confirm").on("click", function () {
             location.reload()
         })
     })
@@ -166,17 +176,17 @@ function setupOptions() {
         .success(function (summaries) {
             groups = summaries.groups
             if (groups.length == 0) {
-                modalError("No groups found!")
+                modalError("未找到分组！")
                 return false;
             } else {
                 var group_s2 = $.map(groups, function (obj) {
                     obj.text = obj.name
-                    obj.title = obj.num_targets + " targets"
+                    obj.title = obj.num_targets + " 个目标"
                     return obj
                 });
                 console.log(group_s2)
                 $("#users.form-control").select2({
-                    placeholder: "Select Groups",
+                    placeholder: "选择分组",
                     data: group_s2,
                 });
             }
@@ -184,7 +194,7 @@ function setupOptions() {
     api.templates.get()
         .success(function (templates) {
             if (templates.length == 0) {
-                modalError("No templates found!")
+                modalError("未找到模板！")
                 return false
             } else {
                 var template_s2 = $.map(templates, function (obj) {
@@ -193,7 +203,7 @@ function setupOptions() {
                 });
                 var template_select = $("#template.form-control")
                 template_select.select2({
-                    placeholder: "Select a Template",
+                    placeholder: "选择模板",
                     data: template_s2,
                 });
                 if (templates.length === 1) {
@@ -205,7 +215,7 @@ function setupOptions() {
     api.pages.get()
         .success(function (pages) {
             if (pages.length == 0) {
-                modalError("No pages found!")
+                modalError("未找到页面！")
                 return false
             } else {
                 var page_s2 = $.map(pages, function (obj) {
@@ -214,7 +224,7 @@ function setupOptions() {
                 });
                 var page_select = $("#page.form-control")
                 page_select.select2({
-                    placeholder: "Select a Landing Page",
+                    placeholder: "选择落地页",
                     data: page_s2,
                 });
                 if (pages.length === 1) {
@@ -226,7 +236,7 @@ function setupOptions() {
     api.SMTP.get()
         .success(function (profiles) {
             if (profiles.length == 0) {
-                modalError("No profiles found!")
+                modalError("未找到发送配置！")
                 return false
             } else {
                 var profile_s2 = $.map(profiles, function (obj) {
@@ -235,7 +245,7 @@ function setupOptions() {
                 });
                 var profile_select = $("#profile.form-control")
                 profile_select.select2({
-                    placeholder: "Select a Sending Profile",
+                    placeholder: "选择发送配置",
                     data: profile_s2,
                 }).select2("val", profile_s2[0]);
                 if (profiles.length === 1) {
@@ -255,7 +265,7 @@ function copy(idx) {
     // Set our initial values
     api.campaignId.get(campaigns[idx].id)
         .success(function (campaign) {
-            $("#name").val("Copy of " + campaign.name)
+            $("#name").val("复制 " + campaign.name)
             if (!campaign.template.id) {
                 $("#template").val("").change();
                 $("#template").select2({
@@ -298,7 +308,7 @@ $(document).ready(function () {
         },
         "showTodayButton": true,
         "defaultDate": moment(),
-        "format": "MMMM Do YYYY, h:mm a"
+        "format": "YYYY-MM-DD HH:mm"
     })
     $("#send_by_date").datetimepicker({
         "widgetPositioning": {
@@ -306,7 +316,7 @@ $(document).ready(function () {
         },
         "showTodayButton": true,
         "useCurrent": false,
-        "format": "MMMM Do YYYY, h:mm a"
+        "format": "YYYY-MM-DD HH:mm"
     })
     // Setup multiple modals
     // Code based on http://miles-by-motorcycle.com/static/bootstrap-modal/index.html
@@ -370,28 +380,29 @@ $(document).ready(function () {
                 }
                 $.each(campaigns, function (i, campaign) {
                     label = labels[campaign.status] || "label-default";
+                    var statusText = statusDisplay[campaign.status] || campaign.status;
 
                     //section for tooltips on the status of a campaign to show some quick stats
                     var launchDate;
                     if (moment(campaign.launch_date).isAfter(moment())) {
-                        launchDate = "Scheduled to start: " + moment(campaign.launch_date).format('MMMM Do YYYY, h:mm:ss a')
-                        var quickStats = launchDate + "<br><br>" + "Number of recipients: " + campaign.stats.total
+                        launchDate = "计划启动时间：" + moment(campaign.launch_date).format('YYYY-MM-DD HH:mm:ss')
+                        var quickStats = launchDate + "<br><br>" + "收件人数：" + campaign.stats.total
                     } else {
-                        launchDate = "Launch Date: " + moment(campaign.launch_date).format('MMMM Do YYYY, h:mm:ss a')
-                        var quickStats = launchDate + "<br><br>" + "Number of recipients: " + campaign.stats.total + "<br><br>" + "Emails opened: " + campaign.stats.opened + "<br><br>" + "Emails clicked: " + campaign.stats.clicked + "<br><br>" + "Submitted Credentials: " + campaign.stats.submitted_data + "<br><br>" + "Errors : " + campaign.stats.error + "<br><br>" + "Reported : " + campaign.stats.email_reported
+                        launchDate = "启动时间：" + moment(campaign.launch_date).format('YYYY-MM-DD HH:mm:ss')
+                        var quickStats = launchDate + "<br><br>" + "收件人数：" + campaign.stats.total + "<br><br>" + "已打开：" + campaign.stats.opened + "<br><br>" + "已点击：" + campaign.stats.clicked + "<br><br>" + "已提交凭据：" + campaign.stats.submitted_data + "<br><br>" + "错误：" + campaign.stats.error + "<br><br>" + "已上报：" + campaign.stats.email_reported
                     }
 
                     var row = [
                         escapeHtml(campaign.name),
-                        moment(campaign.created_date).format('MMMM Do YYYY, h:mm:ss a'),
-                        "<span class=\"label " + label + "\" data-toggle=\"tooltip\" data-placement=\"right\" data-html=\"true\" title=\"" + quickStats + "\">" + campaign.status + "</span>",
-                        "<div class='pull-right'><a class='btn btn-primary' href='/campaigns/" + campaign.id + "' data-toggle='tooltip' data-placement='left' title='View Results'>\
+                        moment(campaign.created_date).format('YYYY-MM-DD HH:mm:ss'),
+                        "<span class=\"label " + label + "\" data-toggle=\"tooltip\" data-placement=\"right\" data-html=\"true\" title=\"" + quickStats + "\">" + statusText + "</span>",
+                        "<div class='pull-right'><a class='btn btn-primary' href='/campaigns/" + campaign.id + "' data-toggle='tooltip' data-placement='left' title='查看结果'>\
                     <i class='fa fa-bar-chart'></i>\
                     </a>\
-            <span data-toggle='modal' data-backdrop='static' data-target='#modal'><button class='btn btn-primary' data-toggle='tooltip' data-placement='left' title='Copy Campaign' onclick='copy(" + i + ")'>\
+            <span data-toggle='modal' data-backdrop='static' data-target='#modal'><button class='btn btn-primary' data-toggle='tooltip' data-placement='left' title='复制活动' onclick='copy(" + i + ")'>\
                     <i class='fa fa-copy'></i>\
                     </button></span>\
-                    <button class='btn btn-danger' onclick='deleteCampaign(" + i + ")' data-toggle='tooltip' data-placement='left' title='Delete Campaign'>\
+                    <button class='btn btn-danger' onclick='deleteCampaign(" + i + ")' data-toggle='tooltip' data-placement='left' title='删除活动'>\
                     <i class='fa fa-trash-o'></i>\
                     </button></div>"
                     ]
@@ -410,7 +421,7 @@ $(document).ready(function () {
         })
         .error(function () {
             $("#loading").hide()
-            errorFlash("Error fetching campaigns")
+            errorFlash("获取活动失败")
         })
     // Select2 Defaults
     $.fn.select2.defaults.set("width", "100%");

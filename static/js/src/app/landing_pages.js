@@ -19,7 +19,7 @@ function save(idx) {
         page.id = pages[idx].id
         api.pageId.put(page)
             .success(function (data) {
-                successFlash("Page edited successfully!")
+                successFlash("页面更新成功！")
                 load()
                 dismiss()
             })
@@ -27,7 +27,7 @@ function save(idx) {
         // Submit the page
         api.pages.post(page)
             .success(function (data) {
-                successFlash("Page added successfully!")
+                successFlash("页面创建成功！")
                 load()
                 dismiss()
             })
@@ -51,12 +51,13 @@ function dismiss() {
 
 var deletePage = function (idx) {
     Swal.fire({
-        title: "Are you sure?",
-        text: "This will delete the landing page. This can't be undone!",
+        title: "确认删除？",
+        text: "该操作将删除落地页且无法撤销。",
         type: "warning",
         animation: false,
         showCancelButton: true,
-        confirmButtonText: "Delete " + escapeHtml(pages[idx].name),
+        confirmButtonText: "删除 " + escapeHtml(pages[idx].name),
+        cancelButtonText: "取消",
         confirmButtonColor: "#428bca",
         reverseButtons: true,
         allowOutsideClick: false,
@@ -74,12 +75,12 @@ var deletePage = function (idx) {
     }).then(function (result) {
         if (result.value){
             Swal.fire(
-                'Landing Page Deleted!',
-                'This landing page has been deleted!',
+                '落地页已删除！',
+                '该落地页已删除。',
                 'success'
             );
         }
-        $('button:contains("OK")').on('click', function () {
+        $(".swal2-confirm").on("click", function () {
             location.reload()
         })
     })
@@ -88,7 +89,7 @@ var deletePage = function (idx) {
 function importSite() {
     url = $("#url").val()
     if (!url) {
-        modalError("No URL Specified!")
+        modalError("未指定 URL！")
     } else {
         api.clone_site({
                 url: url,
@@ -113,7 +114,7 @@ function edit(idx) {
     setupAutocomplete(CKEDITOR.instances["html_editor"])
     var page = {}
     if (idx != -1) {
-        $("#modalLabel").text("Edit Landing Page")
+        $("#modalLabel").text("编辑落地页")
         page = pages[idx]
         $("#name").val(page.name)
         $("#html_editor").val(page.html)
@@ -125,7 +126,7 @@ function edit(idx) {
             $("#redirect_url").show()
         }
     } else {
-        $("#modalLabel").text("New Landing Page")
+        $("#modalLabel").text("新建落地页")
     }
 }
 
@@ -135,7 +136,7 @@ function copy(idx) {
     })
     $("#html_editor").ckeditor()
     var page = pages[idx]
-    $("#name").val("Copy of " + page.name)
+    $("#name").val("复制 " + page.name)
     $("#html_editor").val(page.html)
 }
 
@@ -164,14 +165,14 @@ function load() {
                 $.each(pages, function (i, page) {
                     pageRows.push([
                         escapeHtml(page.name),
-                        moment(page.modified_date).format('MMMM Do YYYY, h:mm:ss a'),
-                        "<div class='pull-right'><span data-toggle='modal' data-backdrop='static' data-target='#modal'><button class='btn btn-primary' data-toggle='tooltip' data-placement='left' title='Edit Page' onclick='edit(" + i + ")'>\
+                        moment(page.modified_date).format('YYYY-MM-DD HH:mm:ss'),
+                        "<div class='pull-right'><span data-toggle='modal' data-backdrop='static' data-target='#modal'><button class='btn btn-primary' data-toggle='tooltip' data-placement='left' title='编辑页面' onclick='edit(" + i + ")'>\
                     <i class='fa fa-pencil'></i>\
                     </button></span>\
-		    <span data-toggle='modal' data-target='#modal'><button class='btn btn-primary' data-toggle='tooltip' data-placement='left' title='Copy Page' onclick='copy(" + i + ")'>\
+		    <span data-toggle='modal' data-target='#modal'><button class='btn btn-primary' data-toggle='tooltip' data-placement='left' title='复制页面' onclick='copy(" + i + ")'>\
                     <i class='fa fa-copy'></i>\
                     </button></span>\
-                    <button class='btn btn-danger' data-toggle='tooltip' data-placement='left' title='Delete Page' onclick='deletePage(" + i + ")'>\
+                    <button class='btn btn-danger' data-toggle='tooltip' data-placement='left' title='删除页面' onclick='deletePage(" + i + ")'>\
                     <i class='fa fa-trash-o'></i>\
                     </button></div>"
                     ])
@@ -184,7 +185,7 @@ function load() {
         })
         .error(function () {
             $("#loading").hide()
-            errorFlash("Error fetching pages")
+            errorFlash("获取页面失败")
         })
 }
 

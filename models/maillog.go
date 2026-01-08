@@ -25,7 +25,7 @@ var MaxSendAttempts = 8
 
 // ErrMaxSendAttempts is thrown when the maximum number of sending attempts for a given
 // MailLog is exceeded.
-var ErrMaxSendAttempts = errors.New("max send attempts exceeded")
+var ErrMaxSendAttempts = errors.New("超过最大发送重试次数")
 
 // Attachments with these file extensions have inline disposition
 var embeddedFileExtensions = []string{".jpg", ".jpeg", ".png", ".gif"}

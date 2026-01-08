@@ -86,13 +86,13 @@ func (t *Target) FormatAddress() string {
 }
 
 // ErrEmailNotSpecified is thrown when no email is specified for the Target
-var ErrEmailNotSpecified = errors.New("No email address specified")
+var ErrEmailNotSpecified = errors.New("未指定邮箱地址")
 
 // ErrGroupNameNotSpecified is thrown when a group name is not specified
-var ErrGroupNameNotSpecified = errors.New("Group name not specified")
+var ErrGroupNameNotSpecified = errors.New("未指定分组名称")
 
 // ErrNoTargetsSpecified is thrown when no targets are specified by the user
-var ErrNoTargetsSpecified = errors.New("No targets specified")
+var ErrNoTargetsSpecified = errors.New("未指定目标")
 
 // Validate performs validation on a group given by the user
 func (g *Group) Validate() error {

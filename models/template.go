@@ -23,10 +23,10 @@ type Template struct {
 }
 
 // ErrTemplateNameNotSpecified is thrown when a template name is not specified
-var ErrTemplateNameNotSpecified = errors.New("Template name not specified")
+var ErrTemplateNameNotSpecified = errors.New("未指定模板名称")
 
 // ErrTemplateMissingParameter is thrown when a needed parameter is not provided
-var ErrTemplateMissingParameter = errors.New("Need to specify at least plaintext or HTML content")
+var ErrTemplateMissingParameter = errors.New("至少需要提供纯文本或 HTML 内容")
 
 // Validate checks the given template to make sure values are appropriate and complete
 func (t *Template) Validate() error {

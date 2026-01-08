@@ -295,6 +295,22 @@ var api = {
 }
 window.api = api
 
+var dataTableLanguage = {
+    sProcessing: "处理中...",
+    sLengthMenu: "每页显示 _MENU_ 条",
+    sZeroRecords: "没有匹配结果",
+    sInfo: "显示 _START_ 到 _END_ 条，共 _TOTAL_ 条",
+    sInfoEmpty: "显示 0 到 0 条，共 0 条",
+    sInfoFiltered: "（从 _MAX_ 条过滤）",
+    sSearch: "搜索：",
+    oPaginate: {
+        sFirst: "首页",
+        sPrevious: "上一页",
+        sNext: "下一页",
+        sLast: "末页"
+    }
+}
+
 // Register our moment.js datatables listeners
 $(document).ready(function () {
     // Setup nav highlighting
@@ -306,7 +322,10 @@ $(document).ready(function () {
             $this.addClass('active');
         }
     })
-    $.fn.dataTable.moment('MMMM Do YYYY, h:mm:ss a');
+    $.fn.dataTable.moment('YYYY-MM-DD HH:mm:ss');
+    $.extend(true, $.fn.dataTable.defaults, {
+        language: dataTableLanguage
+    });
     // Setup tooltips
     $('[data-toggle="tooltip"]').tooltip()
 });

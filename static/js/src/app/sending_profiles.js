@@ -26,12 +26,12 @@ function sendTestEmail() {
         }
     }
     btnHtml = $("#sendTestModalSubmit").html()
-    $("#sendTestModalSubmit").html('<i class="fa fa-spinner fa-spin"></i> Sending')
+    $("#sendTestModalSubmit").html('<i class="fa fa-spinner fa-spin"></i> 发送中')
     // Send the test email
     api.send_test_email(test_email_request)
         .success(function (data) {
             $("#sendTestEmailModal\\.flashes").empty().append("<div style=\"text-align:center\" class=\"alert alert-success\">\
-	    <i class=\"fa fa-check-circle\"></i> Email Sent!</div>")
+	    <i class=\"fa fa-check-circle\"></i> 邮件已发送！</div>")
             $("#sendTestModalSubmit").html(btnHtml)
         })
         .error(function (data) {
@@ -63,7 +63,7 @@ function save(idx) {
         profile.id = profiles[idx].id
         api.SMTPId.put(profile)
             .success(function (data) {
-                successFlash("Profile edited successfully!")
+                successFlash("发送配置更新成功！")
                 load()
                 dismiss()
             })
@@ -74,7 +74,7 @@ function save(idx) {
         // Submit the profile
         api.SMTP.post(profile)
             .success(function (data) {
-                successFlash("Profile added successfully!")
+                successFlash("发送配置创建成功！")
                 load()
                 dismiss()
             })
@@ -99,18 +99,19 @@ function dismiss() {
 
 var dismissSendTestEmailModal = function () {
     $("#sendTestEmailModal\\.flashes").empty()
-    $("#sendTestModalSubmit").html("<i class='fa fa-envelope'></i> Send")
+    $("#sendTestModalSubmit").html("<i class='fa fa-envelope'></i> 发送")
 }
 
 
 var deleteProfile = function (idx) {
     Swal.fire({
-        title: "Are you sure?",
-        text: "This will delete the sending profile. This can't be undone!",
+        title: "确认删除？",
+        text: "该操作将删除发送配置且无法撤销。",
         type: "warning",
         animation: false,
         showCancelButton: true,
-        confirmButtonText: "Delete " + escapeHtml(profiles[idx].name),
+        confirmButtonText: "删除 " + escapeHtml(profiles[idx].name),
+        cancelButtonText: "取消",
         confirmButtonColor: "#428bca",
         reverseButtons: true,
         allowOutsideClick: false,
@@ -128,12 +129,12 @@ var deleteProfile = function (idx) {
     }).then(function (result) {
         if (result.value){
             Swal.fire(
-                'Sending Profile Deleted!',
-                'This sending profile has been deleted!',
+                '发送配置已删除！',
+                '该发送配置已删除。',
                 'success'
             );
         }
-        $('button:contains("OK")').on('click', function () {
+        $(".swal2-confirm").on("click", function () {
             location.reload()
         })
     })
@@ -153,7 +154,7 @@ function edit(idx) {
     })
     var profile = {}
     if (idx != -1) {
-        $("#profileModalLabel").text("Edit Sending Profile")
+        $("#profileModalLabel").text("编辑发送配置")
         profile = profiles[idx]
         $("#name").val(profile.name)
         $("#interface_type").val(profile.interface_type)
@@ -166,7 +167,7 @@ function edit(idx) {
             addCustomHeader(record.key, record.value)
         });
     } else {
-        $("#profileModalLabel").text("New Sending Profile")
+        $("#profileModalLabel").text("新建发送配置")
     }
 }
 
@@ -176,7 +177,7 @@ function copy(idx) {
     })
     var profile = {}
     profile = profiles[idx]
-    $("#name").val("Copy of " + profile.name)
+    $("#name").val("复制 " + profile.name)
     $("#interface_type").val(profile.interface_type)
     $("#from").val(profile.from_address)
     $("#host").val(profile.host)
@@ -208,14 +209,14 @@ function load() {
                     profileRows.push([
                         escapeHtml(profile.name),
                         profile.interface_type,
-                        moment(profile.modified_date).format('MMMM Do YYYY, h:mm:ss a'),
-                        "<div class='pull-right'><span data-toggle='modal' data-backdrop='static' data-target='#modal'><button class='btn btn-primary' data-toggle='tooltip' data-placement='left' title='Edit Profile' onclick='edit(" + i + ")'>\
+                        moment(profile.modified_date).format('YYYY-MM-DD HH:mm:ss'),
+                        "<div class='pull-right'><span data-toggle='modal' data-backdrop='static' data-target='#modal'><button class='btn btn-primary' data-toggle='tooltip' data-placement='left' title='编辑配置' onclick='edit(" + i + ")'>\
                     <i class='fa fa-pencil'></i>\
                     </button></span>\
-		    <span data-toggle='modal' data-target='#modal'><button class='btn btn-primary' data-toggle='tooltip' data-placement='left' title='Copy Profile' onclick='copy(" + i + ")'>\
+		    <span data-toggle='modal' data-target='#modal'><button class='btn btn-primary' data-toggle='tooltip' data-placement='left' title='复制配置' onclick='copy(" + i + ")'>\
                     <i class='fa fa-copy'></i>\
                     </button></span>\
-                    <button class='btn btn-danger' data-toggle='tooltip' data-placement='left' title='Delete Profile' onclick='deleteProfile(" + i + ")'>\
+                    <button class='btn btn-danger' data-toggle='tooltip' data-placement='left' title='删除配置' onclick='deleteProfile(" + i + ")'>\
                     <i class='fa fa-trash-o'></i>\
                     </button></div>"
                     ])
@@ -228,7 +229,7 @@ function load() {
         })
         .error(function () {
             $("#loading").hide()
-            errorFlash("Error fetching profiles")
+            errorFlash("获取发送配置失败")
         })
 }
 

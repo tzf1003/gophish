@@ -22,7 +22,7 @@ const saveWebhook = (id) => {
                 dismiss();
                 load();
                 $("#modal").modal("hide");
-                successFlash(`Webhook "${escapeHtml(wh.name)}" has been updated successfully!`);
+                successFlash(`Webhook "${escapeHtml(wh.name)}" 更新成功！`);
             })
             .error(function(data) {
                 modalError(data.responseJSON.message)
@@ -33,7 +33,7 @@ const saveWebhook = (id) => {
                 load();
                 dismiss();
                 $("#modal").modal("hide");
-                successFlash(`Webhook "${escapeHtml(wh.name)}" has been created successfully!`);
+                successFlash(`Webhook "${escapeHtml(wh.name)}" 创建成功！`);
             })
             .error(function(data) {
                 modalError(data.responseJSON.message)
@@ -61,11 +61,11 @@ const load = () => {
                 webhookTable.row.add([
                     escapeHtml(webhook.name),
                     escapeHtml(webhook.url),
-                    escapeHtml(webhook.is_active),
+                    webhook.is_active ? "启用" : "未启用",
                     `
                       <div class="pull-right">
                         <button class="btn btn-primary ping_button" data-webhook-id="${webhook.id}">
-                          Ping
+                          发送 Ping
                         </button>
                         <button class="btn btn-primary edit_button" data-toggle="modal" data-backdrop="static" data-target="#modal" data-webhook-id="${webhook.id}">
                           <i class="fa fa-pencil"></i>
@@ -79,7 +79,7 @@ const load = () => {
             })
         })
         .error(() => {
-            errorFlash("Error fetching webhooks")
+            errorFlash("获取 Webhook 失败")
         })
 };
 
@@ -88,7 +88,7 @@ const editWebhook = (id) => {
         saveWebhook(id);
     });
     if (id !== -1) {
-        $("#webhookModalLabel").text("Edit Webhook")
+        $("#webhookModalLabel").text("编辑 Webhook")
         api.webhookId.get(id)
           .success(function(wh) {
               $("#name").val(wh.name);
@@ -97,10 +97,10 @@ const editWebhook = (id) => {
               $("#is_active").prop("checked", wh.is_active);
           })
           .error(function () {
-              errorFlash("Error fetching webhook")
+              errorFlash("获取 Webhook 失败")
           });
     } else {
-        $("#webhookModalLabel").text("New Webhook")
+        $("#webhookModalLabel").text("新建 Webhook")
     }
 };
 
@@ -110,12 +110,13 @@ const deleteWebhook = (id) => {
         return;
     }
     Swal.fire({
-        title: "Are you sure?",
-        text: `This will delete the webhook '${escapeHtml(wh.name)}'`,
+        title: "确认删除？",
+        text: `将删除 Webhook '${escapeHtml(wh.name)}'`,
         type: "warning",
         animation: false,
         showCancelButton: true,
-        confirmButtonText: "Delete",
+        confirmButtonText: "删除",
+        cancelButtonText: "取消",
         confirmButtonColor: "#428bca",
         reverseButtons: true,
         allowOutsideClick: false,
@@ -136,12 +137,12 @@ const deleteWebhook = (id) => {
     }).then(function(result) {
         if (result.value) {
             Swal.fire(
-                "Webhook Deleted!",
-                `The webhook has been deleted!`,
+                "Webhook 已删除！",
+                `该 Webhook 已删除！`,
                 "success"
             );
         }
-        $("button:contains('OK')").on("click", function() {
+        $(".swal2-confirm").on("click", function () {
             location.reload();
         })
     })
@@ -153,7 +154,7 @@ const pingUrl = (btn, whId) => {
     api.webhookId.ping(whId)
         .success(function(wh) {
             btn.disabled = false;
-            successFlash(`Ping of "${escapeHtml(wh.name)}" webhook succeeded.`);
+            successFlash(`Webhook "${escapeHtml(wh.name)}" Ping 成功。`);
         })
         .error(function(data) {
             btn.disabled = false;
@@ -161,7 +162,7 @@ const pingUrl = (btn, whId) => {
             if (!wh) {
                 return
             }
-            errorFlash(`Ping of "${escapeHtml(wh.name)}" webhook failed: "${escapeHtml(data.responseJSON.message)}"`)
+            errorFlash(`Webhook "${escapeHtml(wh.name)}" Ping 失败："${escapeHtml(data.responseJSON.message)}"`)
         });
 };
 

@@ -15,17 +15,17 @@ import (
 )
 
 // ErrUsernameTaken is thrown when a user attempts to register a username that is taken.
-var ErrUsernameTaken = errors.New("Username already taken")
+var ErrUsernameTaken = errors.New("用户名已被占用")
 
 // ErrEmptyUsername is thrown when a user attempts to register a username that is taken.
-var ErrEmptyUsername = errors.New("No username provided")
+var ErrEmptyUsername = errors.New("未提供用户名")
 
 // ErrEmptyRole is throws when no role is provided when creating or modifying a user.
-var ErrEmptyRole = errors.New("No role specified")
+var ErrEmptyRole = errors.New("未指定角色")
 
 // ErrInsufficientPermission is thrown when a user attempts to change an
 // attribute (such as the role) for which they don't have permission.
-var ErrInsufficientPermission = errors.New("Permission denied")
+var ErrInsufficientPermission = errors.New("没有权限")
 
 // userRequest is the payload which represents the creation of a new user.
 type userRequest struct {
@@ -136,12 +136,12 @@ func (as *Server) User(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	if !hasSystem && currentUser.Id != id {
-		JSONResponse(w, models.Response{Success: false, Message: http.StatusText(http.StatusForbidden)}, http.StatusForbidden)
+		JSONResponse(w, models.Response{Success: false, Message: "没有权限"}, http.StatusForbidden)
 		return
 	}
 	existingUser, err := models.GetUser(id)
 	if err != nil {
-		JSONResponse(w, models.Response{Success: false, Message: "User not found"}, http.StatusNotFound)
+		JSONResponse(w, models.Response{Success: false, Message: "用户不存在"}, http.StatusNotFound)
 		return
 	}
 	switch {
@@ -154,7 +154,7 @@ func (as *Server) User(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 		log.Infof("Deleted user account for %s", existingUser.Username)
-		JSONResponse(w, models.Response{Success: true, Message: "User deleted Successfully!"}, http.StatusOK)
+		JSONResponse(w, models.Response{Success: true, Message: "用户已删除"}, http.StatusOK)
 	case r.Method == "PUT":
 		ur := &userRequest{}
 		err = json.NewDecoder(r.Body).Decode(ur)

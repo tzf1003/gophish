@@ -56,18 +56,18 @@ type Header struct {
 
 // ErrFromAddressNotSpecified is thrown when there is no "From" address
 // specified in the SMTP configuration
-var ErrFromAddressNotSpecified = errors.New("No From Address specified")
+var ErrFromAddressNotSpecified = errors.New("未指定 From 地址")
 
 // ErrInvalidFromAddress is thrown when the SMTP From field in the sending
 // profiles containes a value that is not an email address
-var ErrInvalidFromAddress = errors.New("Invalid SMTP From address because it is not an email address")
+var ErrInvalidFromAddress = errors.New("SMTP From 地址无效（不是邮箱地址）")
 
 // ErrHostNotSpecified is thrown when there is no Host specified
 // in the SMTP configuration
-var ErrHostNotSpecified = errors.New("No SMTP Host specified")
+var ErrHostNotSpecified = errors.New("未指定 SMTP 主机")
 
 // ErrInvalidHost indicates that the SMTP server string is invalid
-var ErrInvalidHost = errors.New("Invalid SMTP server address")
+var ErrInvalidHost = errors.New("SMTP 服务器地址无效")
 
 // TableName specifies the database tablename for Gorm to use
 func (s SMTP) TableName() string {
